@@ -1,0 +1,48 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6c78a9;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.rain__drop {
+  animation-delay: calc(var(--d) * 1s);
+  animation-duration: calc(var(--a) * 3s); /* Adjust the duration value as desired */
+  animation-iteration-count: infinite;
+  animation-name: drop;
+  animation-timing-function: linear;
+  height: 30px;
+  left: calc(var(--x) * 1%);
+  position: absolute;
+  top: calc((var(--y) + 50) * -1px);
+}
+
+.rain__drop path {
+  fill: #a1c6cc;
+  opacity: var(--o);
+  transform: translateY(0);
+  transform-origin: center bottom;
+}
+
+@keyframes drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100vh) scaleY(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) scaleY(1.5);
+  }
+}
