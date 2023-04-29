@@ -3,29 +3,52 @@
 
 <head>
   <link rel="stylesheet" href="css/styles.css">
-  <script src="javascript\Shrink.js"></script>
-  <script src="javascript\background.js"></script>
+  <script src="javascript/Shrink.js"></script>
+  <script src="javascript/background.js"></script>
+  <script src="javascript/pageSwitch.js"></script>
   <meta charset="utf-8">
-  <title>Raindrop Background</title>
-  </head>
-  <body>
-    <div class="rain"></div>
-    <div class="task-window">
-      <div class="Pages">
-        <p id="page-display">Home</p>
-        <button id="shrink-button"><</button>
+  <title>Tasks</title>
+</head>
+
+<body>
+  <div class="rain"></div>
+  <div class="task-window">
+    <div class="Pages">
+      <button id="tasks-button" class="home-button active">Tasks</button>
+      <button id="courses-button" class="home-button">Courses</button>
+      <button id="shrink-button"><</button>
+    </div>
+    <div class="right-content">
+      <div class="Title-Tasks">
+        <p>Tasks</p>
       </div>
-      <div class="right-content">
-        <div class="Title">
-          <p>Tasks</p>
+      <div class="Tasks">
+        <p>Task location</p>
+      </div>
+      <div class="Task-Create">
+        <div class="Task-Container">
+          <div class="hover-panel">
+            <div class="panel"></div>
+            <button class="create-task-button">Create Task</button>
+          </div>
         </div>
-        <div class="Tasks">
-          <p>Tasks</p>
-        </div>
-        <div class="Task-Create">
-          <p>Task Create</p>
+      </div>
+      <div class="Title-Courses">
+        <p>Courses</p>
+      </div>
+      <div class="Courses">
+        <p>Course Location</p>
+      </div>
+      <div class="Course-Adder">
+        <div class="Course-Container">
+          <div class="hover-panel">
+            <div class="panel"></div>
+            <button class="add-course-button">Add Course</button>
+          </div>
         </div>
       </div>
     </div>
-  </body>
-  </html>
+  </div>
+</body>
+
+</html>
