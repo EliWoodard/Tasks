@@ -6,6 +6,8 @@
   <script src="javascript/Shrink.js"></script>
   <script src="javascript/background.js"></script>
   <script src="javascript/pageSwitch.js"></script>
+  <script src="javascript/pressCreateCourse.js"></script>
+  <script src="javascript/pressCreateTask.js"></script>
   <meta charset="utf-8">
   <title>Tasks</title>
 </head>
@@ -16,39 +18,76 @@
     <div class="Pages">
       <button id="tasks-button" class="home-button active">Tasks</button>
       <button id="courses-button" class="home-button">Courses</button>
-      <button id="shrink-button"><</button>
-    </div>
-    <div class="right-content">
-      <div class="Title-Tasks">
-        <p>Tasks</p>
-      </div>
-      <div class="Tasks">
-        <p>Task location</p>
-      </div>
-      <div class="Task-Create">
-        <div class="Task-Container">
-          <div class="hover-panel">
-            <div class="panel"></div>
-            <button class="create-task-button">Create Task</button>
+      <button id="shrink-button">
+        < </div>
+          <div class="right-content">
+            <div class="Title-Tasks">
+              <p>Tasks</p>
+            </div>
+            <div class="Tasks">
+
+            </div>
+            <div class="Task-Create">
+              <div class="Task-Container">
+                <div class="hover-panel">
+                  <div class="panel"></div>
+                  <button class="create-task-button">Create Task</button>
+                </div>
+              </div>
+            </div>
+            <div class="Title-Courses">
+              <p>Courses</p>
+            </div>
+            <div class="Courses">
+              <p>Course Location</p>
+            </div>
+            <div class="Course-Adder">
+              <div class="Course-Container">
+                <div class="hover-panel">
+                  <div class="panel"></div>
+                  <button class="add-course-button">Add Course</button>
+                </div>
+              </div>
+            </div>
           </div>
+    </div>
+
+    <div class="AddTaskWindow">
+      <div class="Title-AddTask">
+        <p class="Title-AddTask-Element">New Task</p>
+      </div>
+      <div class="DueDate_Subject_AddSubject">
+        <div class="DueDate">
+          <p class="NewTaskText">Date</p>
+
+          <input type="date" id="date" name="date">
+        </div>
+        <div class="Subject">
+          <p class="NewTaskText">Subject</p>
+          <select id="subject-select" name="subject">
+            <option value="">Subject</option>
+            <option value="math">Math</option>
+            <option value="science">Science</option>
+            <option value="english">English</option>
+          </select>
         </div>
       </div>
-      <div class="Title-Courses">
-        <p>Courses</p>
+      <div class="AddTitle">
+        <p class="NewTaskText" id="Title-Text">Title</p>
+        <input type="text" class="task-title" name="task-title">
       </div>
-      <div class="Courses">
-        <p>Course Location</p>
+      <div class="Add_Description">
+        <p class="NewTaskText" id="Description-Text">Description</p>
+        <textarea id="task-Description" name="task-Description"></textarea>
       </div>
-      <div class="Course-Adder">
-        <div class="Course-Container">
-          <div class="hover-panel">
-            <div class="panel"></div>
-            <button class="add-course-button">Add Course</button>
-          </div>
-        </div>
+
+      <div class="DiscardAndSave">
+        <button type="button" class="task-button">Discard</button>
+        <button type="button" class="task-button">Save</button>
       </div>
-    </div>
-  </div>
+      <div class="AddCourseWindow">
+
+      </div>
 </body>
 
 </html>
