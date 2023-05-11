@@ -78,7 +78,7 @@ body {
   color: #fff;
   border: none;
   text-align: left;
-  font-size: 150%;
+  font-size: calc(1vw + 1vh);
   margin-top: 10%;
   margin-right: 10%;
   cursor: pointer;
@@ -187,6 +187,8 @@ body {
   position: relative;
   width: 30%;
   height: 50%;
+  min-height: 400px;
+  min-width: 280px;
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
@@ -194,6 +196,7 @@ body {
   display: grid;
   grid-template-rows: 9% 11% 11% 20% 9%;
   grid-template-columns: 1fr;
+  overflow: auto;
   gap: 8%; }
 
 .Title-AddTask {
@@ -205,11 +208,13 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: flex;
-  align-items: left; }
+  align-items: center;
+  position: inherit; }
 
 .Title-AddTask-Element {
-  font-size: 200%;
-  margin: 1% 0 0 6%; }
+  font-size: 130%;
+  position: inherit;
+  left: 5%; }
 
 .DueDate_Subject_AddSubject {
   display: flex;
@@ -219,6 +224,7 @@ body {
 .DueDate_Subject_AddSubject input[type="date"],
 .DueDate_Subject_AddSubject select {
   width: 80%;
+  height: 57%;
   border: 1px solid #ccc;
   border-radius: 0;
   padding: 5px;
@@ -231,6 +237,7 @@ body {
 
 .NewTaskText {
   font-size: 100%;
+  height: 34%;
   margin: 1%;
   color: #686868; }
 
@@ -279,12 +286,17 @@ body {
 
 .task-button {
   padding: 2.5% 5.5%;
+  height: 85%;
   font-size: 100%;
   cursor: pointer;
   border: 1px solid #ccc;
-  border-radius: 4px;
   background-color: #f8f8f8;
-  transition: background-color 0.3s; }
+  transition: background-color 0.3s;
+  vertical-align: middle;
+  align-items: center;
+  align-content: center;
+  position: inherit;
+  display: grid; }
 
 .task-button:hover {
   background-color: #e8e8e8; }
@@ -313,9 +325,14 @@ body {
 .Title-Courses {
   position: relative; }
 
+.TitleText {
+  height: calc(2vw + 2vh);
+  overflow: hidden;
+  width: 100%; }
+
 .Title-Tasks p,
 .Title-Courses p {
-  font-size: 300%;
+  font-size: calc(2vw + 2vh);
   margin: 0; }
 
 .Title-Tasks::after,

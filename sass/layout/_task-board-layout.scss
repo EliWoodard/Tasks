@@ -25,9 +25,15 @@
   position: relative;
 }
 
+.TitleText {
+  height: calc(2vw + 2vh);
+  overflow: hidden;
+  width: 100%;
+}
+
 .Title-Tasks p,
 .Title-Courses p {
-  font-size: 300%;
+    font-size: calc(2vw + 2vh);
   margin: 0;
 }
 
