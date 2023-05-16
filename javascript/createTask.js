@@ -42,11 +42,29 @@ document.addEventListener("DOMContentLoaded", function() {
     subjectBox.classList.add("task-subject-box");
     subjectBox.textContent = subjectSelect.value;
 
+    var descriptionBox = document.createElement("div");
+    descriptionBox.classList.add("task-description-box");
+    descriptionBox.textContent = taskDescriptionTextarea.value;
+
+    var completeButton = document.createElement("button");
+    completeButton.classList.add("task-button-box");
+    completeButton.textContent = "Complete";
+
     taskContainer.appendChild(taskBox);
     taskBox.appendChild(titleBox);
     taskBox.appendChild(dateBox);
     taskBox.appendChild(subjectBox);
+    taskBox.appendChild(descriptionBox);
+    taskBox.appendChild(completeButton);
 
     discardButton.click();
+
+    taskBox.addEventListener("click", function() {
+    this.classList.toggle("expanded");
+    });
+
+    completeButton.addEventListener("click", function() {
+      taskBox.remove();
+    });
   });
 });

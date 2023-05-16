@@ -1,12 +1,14 @@
 .Tasks {
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   max-height: 100%;
   overflow-y: auto;
 }
 
 .task-title-box {
-  font-size: 100%;
+  font-size: calc(.5vw + .5vh);
+  width: 77%;
 }
 
 .task-box {
@@ -20,8 +22,12 @@
   margin: 2% 0 2% 2%;
   padding: 1em;
   flex-wrap: wrap;
-  align-content: flex-start;
+  align-content: center;
   transition: all 0.3s ease;  /* Add transition for smooth hover effect */
+}
+
+.expanded {
+    height: 30%;
 }
 
 .task-box:hover {
@@ -32,8 +38,8 @@
 .task-date-box,
 .task-subject-box,
 .task-title-box {
-  width: 46%;
   margin: 1%;
+  overflow: hidden;
 }
 
 .task-date-box {
@@ -41,13 +47,42 @@
   font-size: 90%;
   justify-content: right;
   display: flex;
+  width: 19%;
 }
 
 .task-subject-box {
   color: #777;
-  font-size: 90%;
+  width: 48%;
+  font-size: 95%;
 }
 
-.task-description-box {}
+.task-description-box,
+.task-button-box {
+  display: none;
+}
 
-.task-button-box {}
+.expanded .task-description-box,
+.expanded .task-button-box {
+  display: flex;
+}
+
+
+.task-description-box {
+  width: 98%;
+  height: 40%;
+  margin: 1%;
+}
+
+.task-button-box {
+  width: 98%;
+  background-color: #2E8B57;
+  color: #ffffff;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 1%;
+  justify-content: center;
+  align-items: center;
+}

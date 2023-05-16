@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
   tasksButton.addEventListener("click", function() {
     tasksButton.classList.add("active");
     coursesButton.classList.remove("active");
-    tasksSection.style.display = "block";
+    tasksSection.style.display = "flex";
     taskCreateSection.style.display = "block";
     coursesSection.style.display = "none";
     courseAdderSection.style.display = "none";
