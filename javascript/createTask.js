@@ -34,9 +34,9 @@ document.addEventListener("DOMContentLoaded", function() {
     var dateBox = document.createElement("div");
     dateBox.classList.add("task-date-box");
     var date = new Date(dueDateInput.value);
-    var month = date.toLocaleString('default', { month: 'short' }); // Get the short month name (e.g., May)
-    var day = date.getDate(); // Get the day
-    dateBox.textContent = month + "-" + day;
+    var month = date.toLocaleString('default', { month: 'short' });
+    var day = date.getDate() + 1;
+    dateBox.textContent = month + " " + day;
 
     var subjectBox = document.createElement("div");
     subjectBox.classList.add("task-subject-box");
@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
     taskBox.appendChild(titleBox);
     taskBox.appendChild(dateBox);
     taskBox.appendChild(subjectBox);
+
     discardButton.click();
   });
 });

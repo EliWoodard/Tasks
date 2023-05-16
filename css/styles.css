@@ -187,18 +187,44 @@ body {
   overflow-y: auto; }
 
 .task-title-box {
-  font-size: 100%;
-  margin: 3% 0 0 3%; }
+  font-size: 100%; }
 
 .task-box {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 30%;
   height: 10%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin: 2% 0 2% 2%;
-  min-height: 10%; }
+  padding: 1em;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  transition: all 0.3s ease;
+  /* Add transition for smooth hover effect */ }
+
+.task-box:hover {
+  transform: translateY(-5px);
+  /* Move the box up by 5px */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Increase the shadow */ }
+
+.task-date-box,
+.task-subject-box,
+.task-title-box {
+  width: 46%;
+  margin: 1%; }
+
+.task-date-box {
+  color: #2E8B57;
+  font-size: 90%;
+  justify-content: right;
+  display: flex; }
+
+.task-subject-box {
+  color: #777;
+  font-size: 90%; }
 
 .AddCourseWindow {
   display: none; }
