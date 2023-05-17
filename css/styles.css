@@ -157,7 +157,7 @@ body {
 .add-course-button {
   width: 100%;
   height: 100%;
-  background-color: #ff9900;
+  background-color: #cf7c00;
   color: #ffffff;
   border: none;
   font-size: 16px;
@@ -173,7 +173,7 @@ body {
   box-shadow: 0 .2em gray; }
 
 .hover-panel:hover .add-course-button {
-  background-color: #ff8000; }
+  background-color: #cf7c00; }
 
 .add-course-button:active {
   box-shadow: none;
@@ -183,6 +183,7 @@ body {
 .Tasks {
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   max-height: 100%;
   overflow-y: auto; }
 
@@ -222,7 +223,7 @@ body {
 
 .task-date-box {
   color: #2E8B57;
-  font-size: 90%;
+  font-size: calc(.5vw + .5vh);
   justify-content: right;
   display: flex;
   width: 19%; }
@@ -230,7 +231,7 @@ body {
 .task-subject-box {
   color: #777;
   width: 48%;
-  font-size: 95%; }
+  font-size: calc(.4vw + .4vh); }
 
 .task-description-box,
 .task-button-box {
@@ -243,23 +244,90 @@ body {
 .task-description-box {
   width: 98%;
   height: 40%;
-  margin: 1%; }
+  margin: 1%;
+  font-size: calc(.5vw + .5vh);
+  border: 1px solid #777;
+  overflow-wrap: anywhere; }
 
 .task-button-box {
   width: 98%;
   background-color: #2E8B57;
   color: #ffffff;
   border: none;
-  font-size: 16px;
+  font-size: calc(.5vw + .5vh);
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin: 1%;
+  padding: 2%;
   justify-content: center;
   align-items: center; }
 
 .AddCourseWindow {
-  display: none; }
+  position: relative;
+  width: 15%;
+  height: 15%;
+  min-height: 100px;
+  min-width: 280px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  z-index: 10;
+  display: none;
+  grid-template-rows: 9% 11% 11% 20% 9%;
+  grid-template-columns: 1fr;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-between;
+  justify-content: flex-start;
+  gap: 8%; }
+
+.Course-AddTask-Element {
+  width: 100%;
+  height: 25%;
+  margin: 0;
+  background-color: #cf7c00;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  position: inherit; }
+
+.course-button {
+  padding: 2.5% 5.5%;
+  height: 85%;
+  font-size: 100%;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  transition: background-color 0.3s;
+  vertical-align: middle;
+  align-items: center;
+  align-content: center;
+  position: inherit;
+  display: grid; }
+
+.course-input {
+  width: 100%;
+  display: flex;
+  margin: 1%;
+  justify-content: space-between; }
+
+.course-buttons {
+  width: 100%;
+  display: flex;
+  gap: 5%;
+  margin: 1%;
+  justify-content: flex-end; }
+
+#course-name {
+  width: 50%; }
+
+#course-color {
+  left: 0; }
 
 .AddTaskWindow {
   position: relative;
@@ -421,7 +489,8 @@ body {
 .Title-Courses p,
 .Title-Tasks p {
   font-size: calc(2vw + 2vh);
-  margin: 0; }
+  margin: 0 2% 0 2%;
+  width: 96%; }
 
 .Title-Courses::after,
 .Title-Tasks::after {
