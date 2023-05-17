@@ -18,7 +18,7 @@
   align-items: flex-start;
   width: 30%;
   height: 10%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(#2E8B57, 0.4);
   margin: 2% 0 2% 2%;
   padding: 1em;
   flex-wrap: wrap;
@@ -32,7 +32,7 @@
 
 .task-box:hover {
   transform: translateY(-5px);  /* Move the box up by 5px */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Increase the shadow */
+  box-shadow: 0 4px 8px rgba(#2E8B57, 0.3);  /* Increase the shadow */
 }
 
 .task-date-box,
