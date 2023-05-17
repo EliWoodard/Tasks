@@ -307,7 +307,7 @@ body {
   position: relative;
   width: 15%;
   height: 15%;
-  min-height: 100px;
+  min-height: 145px;
   min-width: 280px;
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -369,7 +369,7 @@ body {
   justify-content: flex-end; }
 
 .couse-title {
-  display: flex; }
+  margin: 1%; }
 
 #course-name {
   width: 50%; }
