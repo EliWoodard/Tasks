@@ -189,6 +189,8 @@ body {
 
 .course-box {
   display: flex;
+  position: relative;
+  overflow: hidden;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -219,6 +221,33 @@ body {
   margin: 1%;
   font-size: calc(.5vw + .5vh);
   overflow: hidden; }
+
+.CourseDeleteWindow {
+  display: none;
+  position: absolute;
+  /* Added this line */
+  bottom: 0;
+  /* Added this line */
+  width: 100%;
+  /* Added this line */ }
+
+.course-box.clicked .CourseDeleteWindow {
+  display: flex;
+  justify-content: flex-end; }
+
+#delete-course-button {
+  width: 24%;
+  max-width: 70px;
+  max-height: 20px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  border: none;
+  font-size: calc(.5vw + .5vh);
+  padding: 1.6%;
+  margin: 1%;
+  border: none;
+  padding: 4%; }
 
 .Tasks {
   display: flex;

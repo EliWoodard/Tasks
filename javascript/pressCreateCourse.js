@@ -21,30 +21,57 @@ document.addEventListener("DOMContentLoaded", function() {
     courseColorInput.value = "none";
   });
 
-  saveCourseButton.addEventListener("click", function() {
-    console.log("Save course button clicked!");
+    saveCourseButton.addEventListener("click", function() {
+      console.log("Save course button clicked!");
 
-    var courseBox = document.createElement("div");
-    courseBox.classList.add("course-box");
+      var courseBox = document.createElement("div");
+      courseBox.classList.add("course-box");
 
-    var colorBox = document.createElement("div");
-    colorBox.style.backgroundColor = courseColorInput.value;
-    colorBox.classList.add("course-color-box");
+      var colorBox = document.createElement("div");
+      colorBox.style.backgroundColor = courseColorInput.value;
+      colorBox.classList.add("course-color-box");
 
-    var textBox = document.createElement("div");
-    textBox.textContent = courseNameInput.value;
-    textBox.classList.add("course-text-box");
+      var textBox = document.createElement("div");
+      textBox.textContent = courseNameInput.value;
+      textBox.classList.add("course-text-box");
 
-    courseBox.appendChild(colorBox);
-    courseBox.appendChild(textBox);
-    coursesContainer.appendChild(courseBox);
+      var deleteWindow = document.createElement("div");
+      deleteWindow.classList.add("CourseDeleteWindow");
 
-    var subjectSelect = document.querySelector("#subject-select");
-    var newOption = document.createElement("option");
-    newOption.text = courseNameInput.value;
-    newOption.value = courseNameInput.value;
-    subjectSelect.add(newOption);
+      var deleteButton = document.createElement("button");
+      deleteButton.id = "delete-course-button";
+      deleteButton.textContent = "Remove";
 
-    discardCourseButton.click();
+      courseBox.appendChild(colorBox);
+      courseBox.appendChild(textBox);
+      courseBox.appendChild(deleteWindow);
+      deleteWindow.appendChild(deleteButton);
+      coursesContainer.appendChild(courseBox);
+
+      var subjectSelect = document.querySelector("#subject-select");
+      var newOption = document.createElement("option");
+      newOption.text = courseNameInput.value;
+      newOption.value = courseNameInput.value;
+      subjectSelect.add(newOption);
+
+      var courseNameValue = courseNameInput.value; // save the value at the time of course creation
+
+      discardCourseButton.click();
+
+      courseBox.addEventListener("click", function() {
+        this.classList.toggle("clicked");
+      });
+
+      deleteButton.addEventListener("click", function(event) {
+        event.stopPropagation();
+         courseBox.remove();
+         var options = Array.from(subjectSelect.options);
+         var optionToRemove = options.find(function(option) {
+           return option.value === courseNameValue; // use the saved value here
+         });
+         if (optionToRemove) {
+           subjectSelect.removeChild(optionToRemove);
+         }
+      });
+    });
   });
-});

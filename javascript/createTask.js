@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
     discardButton.click();
 
     taskBox.addEventListener("click", function() {
-    this.classList.toggle("expanded");
+      this.classList.toggle("expanded");
     });
 
     completeButton.addEventListener("click", function() {
