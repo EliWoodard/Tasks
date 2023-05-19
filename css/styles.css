@@ -1,7 +1,8 @@
 *,
 *:before,
 *:after {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 body {
   display: flex;
@@ -10,36 +11,41 @@ body {
   background-color: #6c78a9;
   height: 100vh;
   margin: 0;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .rain__drop {
   animation-delay: calc(var(--d) * 1s);
-  animation-duration: calc(var(--a) * 3s);
-  /* Adjust the duration value as desired */
+  animation-duration: calc(var(--a) * 3s); /* Adjust the duration value as desired */
   animation-iteration-count: infinite;
   animation-name: drop;
   animation-timing-function: linear;
   height: 30px;
   left: calc(var(--x) * 1%);
   position: absolute;
-  top: calc((var(--y) + 50) * -1px); }
+  top: calc((var(--y) + 50) * -1px);
+}
 
 .rain__drop path {
   fill: #a1c6cc;
   opacity: var(--o);
   transform: translateY(0);
-  transform-origin: center bottom; }
+  transform-origin: center bottom;
+}
 
 @keyframes drop {
   0% {
     opacity: 0;
-    transform: translateY(-100vh) scaleY(0); }
+    transform: translateY(-100vh) scaleY(0);
+  }
   90% {
-    opacity: 1; }
+    opacity: 1;
+  }
   100% {
     opacity: 0;
-    transform: translateY(100vh) scaleY(1.5); } }
-
+    transform: translateY(100vh) scaleY(1.5);
+  }
+}
 #shrink-button {
   position: absolute;
   top: 50%;
@@ -55,19 +61,24 @@ body {
   border: none;
   transition: transform 0.5s;
   color: #e7e7e7;
-  font-size: 200%; }
+  font-size: 200%;
+}
 
 .task-window.shrink {
-  grid-template-columns: 2% 98%; }
+  grid-template-columns: 2% 98%;
+}
 
 .task-window.shrink .Pages *:not(.shrink-button) {
-  display: none; }
+  display: none;
+}
 
 .task-window.shrink .Pages .shrink-button {
-  display: block; }
+  display: block;
+}
 
 #shrink-button.flipped {
-  transform: translateY(-50%) rotate(180deg); }
+  transform: translateY(-50%) rotate(180deg);
+}
 
 .home-button,
 .courses-button {
@@ -84,40 +95,46 @@ body {
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s, transform 0.3s;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .home-button.active {
-  background-color: #2E8B57; }
+  background-color: #2E8B57;
+}
 
 .home-button:hover,
 .courses-button:hover {
-  background-color: #388E3C; }
+  background-color: #388E3C;
+}
 
 .home-button:active,
 .courses-button:active {
-  transform: translateY(1px); }
+  transform: translateY(1px);
+}
 
 .home-button.active,
 .home-button:hover,
 .courses-button.active,
 .courses-button:hover {
   background-color: #2E8B57;
-  width: 80%;
-  /* Adjust the width as per your preference */ }
+  width: 80%; /* Adjust the width as per your preference */
+}
 
 .Task-Container,
 .Course-Container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; }
+  height: 100%;
+}
 
 .hover-panel {
   width: 100%;
   height: 100%;
   position: relative;
   perspective: 800px;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .panel {
   width: 100%;
@@ -129,10 +146,12 @@ body {
   transform-style: preserve-3d;
   transition: transform 0.5s ease;
   transform-origin: top center;
-  z-index: 2; }
+  z-index: 2;
+}
 
 .hover-panel:hover .panel {
-  transform: rotateX(180deg); }
+  transform: rotateX(180deg);
+}
 
 .create-task-button {
   width: 100%;
@@ -142,17 +161,20 @@ body {
   border: none;
   font-size: 16px;
   font-weight: bold;
-  box-shadow: 0 .2em gray;
+  box-shadow: 0 0.2em gray;
   cursor: pointer;
-  transition: background-color 0.3s ease; }
+  transition: background-color 0.3s ease;
+}
 
 .create-task-button:hover {
-  background-color: #009900; }
+  background-color: #009900;
+}
 
 .create-task-button:active {
   box-shadow: none;
   position: relative;
-  top: .2em; }
+  top: 0.2em;
+}
 
 .add-course-button {
   width: 100%;
@@ -170,22 +192,26 @@ body {
   font-weight: bold;
   text-align: center;
   display: inline-block;
-  box-shadow: 0 .2em gray; }
+  box-shadow: 0 0.2em gray;
+}
 
 .hover-panel:hover .add-course-button {
-  background-color: #cf7c00; }
+  background-color: #cf7c00;
+}
 
 .add-course-button:active {
   box-shadow: none;
   position: relative;
-  top: .2em; }
+  top: 0.2em;
+}
 
 .Courses {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   max-height: 100%;
-  overflow-y: auto; }
+  overflow-y: auto;
+}
 
 .course-box {
   display: flex;
@@ -201,39 +227,39 @@ body {
   flex-wrap: wrap;
   transition: all 0.3s ease;
   gap: 4%;
-  font-size: calc(1.2vw + 1.2vh); }
+  font-size: calc(1.2vw + 1.2vh);
+}
 
 .course-box:hover {
-  transform: translateY(-5px);
-  /* Move the box up by 5px */
-  box-shadow: 0 4px 8px rgba(207, 124, 0, 0.4);
-  /* Increase the shadow */ }
+  transform: translateY(-5px); /* Move the box up by 5px */
+  box-shadow: 0 4px 8px rgba(207, 124, 0, 0.4); /* Increase the shadow */
+}
 
 .course-color-box {
   width: 8%;
   height: 100%;
-  background-color: #777;
-  /* Default color, will be overridden by JavaScript */ }
+  background-color: #777; /* Default color, will be overridden by JavaScript */
+}
 
 .course-name-box {
   color: #777;
   width: 75%;
   margin: 1%;
-  font-size: calc(.5vw + .5vh);
-  overflow: hidden; }
+  font-size: calc(0.5vw + 0.5vh);
+  overflow: hidden;
+}
 
 .CourseDeleteWindow {
   display: none;
-  position: absolute;
-  /* Added this line */
-  bottom: 0;
-  /* Added this line */
-  width: 100%;
-  /* Added this line */ }
+  position: absolute; /* Added this line */
+  bottom: 0; /* Added this line */
+  width: 100%; /* Added this line */
+}
 
 .course-box.clicked .CourseDeleteWindow {
   display: flex;
-  justify-content: flex-end; }
+  justify-content: flex-end;
+}
 
 #delete-course-button {
   width: 24%;
@@ -243,22 +269,25 @@ body {
   display: flex;
   align-items: center;
   border: none;
-  font-size: calc(.5vw + .5vh);
+  font-size: calc(0.5vw + 0.5vh);
   padding: 1.6%;
   margin: 1%;
   border: none;
-  padding: 4%; }
+  padding: 4%;
+}
 
 .Tasks {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   max-height: 100%;
-  overflow-y: auto; }
+  overflow-y: auto;
+}
 
 .task-title-box {
-  font-size: calc(.5vw + .5vh);
-  width: 77%; }
+  font-size: calc(0.5vw + 0.5vh);
+  width: 77%;
+}
 
 .task-box {
   display: flex;
@@ -272,65 +301,72 @@ body {
   padding: 1em;
   flex-wrap: wrap;
   align-content: center;
-  transition: all 0.3s ease;
-  /* Add transition for smooth hover effect */ }
+  transition: all 0.3s ease; /* Add transition for smooth hover effect */
+}
 
 .expanded {
-  height: 30%; }
+  height: 30%;
+}
 
 .task-box:hover {
-  transform: translateY(-5px);
-  /* Move the box up by 5px */
-  box-shadow: 0 4px 8px rgba(46, 139, 87, 0.3);
-  /* Increase the shadow */ }
+  transform: translateY(-5px); /* Move the box up by 5px */
+  box-shadow: 0 4px 8px rgba(46, 139, 87, 0.3); /* Increase the shadow */
+}
 
 .task-date-box,
 .task-subject-box,
 .task-title-box {
   margin: 1%;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .task-date-box {
   color: #2E8B57;
-  font-size: calc(.5vw + .5vh);
+  font-size: calc(0.5vw + 0.5vh);
   justify-content: right;
   display: flex;
-  width: 19%; }
+  width: 19%;
+}
 
 .task-subject-box {
   color: #777;
   width: 48%;
-  font-size: calc(.4vw + .4vh); }
+  font-size: calc(0.4vw + 0.4vh);
+}
 
 .task-description-box,
 .task-button-box {
-  display: none; }
+  display: none;
+}
 
 .expanded .task-description-box,
 .expanded .task-button-box {
-  display: flex; }
+  display: flex;
+}
 
 .task-description-box {
   width: 98%;
   height: 40%;
   margin: 1%;
-  font-size: calc(.5vw + .5vh);
+  font-size: calc(0.5vw + 0.5vh);
   border: 1px solid #777;
-  overflow-wrap: anywhere; }
+  overflow-wrap: anywhere;
+}
 
 .task-button-box {
   width: 98%;
   background-color: #2E8B57;
   color: #ffffff;
   border: none;
-  font-size: calc(.5vw + .5vh);
+  font-size: calc(0.5vw + 0.5vh);
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin: 1%;
   padding: 2%;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+}
 
 .AddCourseWindow {
   position: relative;
@@ -351,7 +387,8 @@ body {
   align-content: space-between;
   justify-content: flex-start;
   border-radius: 3px;
-  gap: 8%; }
+  gap: 8%;
+}
 
 .Course-AddTask-Element {
   width: 100%;
@@ -365,7 +402,8 @@ body {
   border-radius: 3px 0 0 0;
   display: flex;
   align-items: center;
-  position: inherit; }
+  position: inherit;
+}
 
 .course-button {
   padding: 2.5% 5.5%;
@@ -379,32 +417,39 @@ body {
   align-items: center;
   align-content: center;
   position: inherit;
-  display: grid; }
+  display: grid;
+}
 
 .course-button:hover {
-  background-color: #e8e8e8; }
+  background-color: #e8e8e8;
+}
 
 .course-input {
   width: 100%;
   display: flex;
   margin: 1%;
-  justify-content: space-between; }
+  justify-content: space-between;
+}
 
 .course-buttons {
   width: 100%;
   display: flex;
   gap: 5%;
   margin: 1%;
-  justify-content: flex-end; }
+  justify-content: flex-end;
+}
 
 .couse-title {
-  margin: 1%; }
+  margin: 1%;
+}
 
 #course-name {
-  width: 50%; }
+  width: 50%;
+}
 
 #course-color {
-  left: 0; }
+  left: 0;
+}
 
 .AddTaskWindow {
   position: relative;
@@ -420,7 +465,8 @@ body {
   grid-template-rows: 9% 11% 11% 20% 9%;
   grid-template-columns: 1fr;
   overflow: auto;
-  gap: 8%; }
+  gap: 8%;
+}
 
 .overlay {
   position: fixed;
@@ -429,7 +475,8 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9; }
+  z-index: 9;
+}
 
 .Title-AddTask {
   width: 100%;
@@ -441,56 +488,66 @@ body {
   transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
-  position: inherit; }
+  position: inherit;
+}
 
 .Title-AddTask-Element {
   font-size: 130%;
   position: inherit;
-  left: 5%; }
+  left: 5%;
+}
 
 .DueDate_Subject_AddSubject {
   display: flex;
   flex-direction: row;
-  justify-content: space-between; }
+  justify-content: space-between;
+}
 
-.DueDate_Subject_AddSubject input[type="date"],
+.DueDate_Subject_AddSubject input[type=date],
 .DueDate_Subject_AddSubject select {
   width: 80%;
   height: 57%;
   border: 1px solid #ccc;
   border-radius: 0;
   padding: 5px;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 .DueDate_Subject_AddSubject .DueDate,
 .DueDate_Subject_AddSubject .Subject {
   width: 48%;
-  margin: 0 5%; }
+  margin: 0 5%;
+}
 
 .NewTaskText {
   font-size: 100%;
   height: 34%;
   margin: 1%;
-  color: #686868; }
+  color: #686868;
+}
 
 .AddTitle {
   height: 100%;
-  width: 100%; }
+  width: 100%;
+}
 
 .task-title {
   width: 90%;
   height: 60%;
-  margin: 0 5%; }
+  margin: 0 5%;
+}
 
 #Title-Text {
-  margin: 0 5%; }
+  margin: 0 5%;
+}
 
 .Add_Description {
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; }
+  align-items: flex-start;
+}
 
 #task-Description {
   width: 90%;
@@ -500,10 +557,12 @@ body {
   border-radius: 0;
   padding: 5px;
   box-sizing: border-box;
-  resize: none; }
+  resize: none;
+}
 
 #Description-Text {
-  margin: 0 5%; }
+  margin: 0 5%;
+}
 
 .DiscardAndSave {
   height: 100%;
@@ -512,7 +571,8 @@ body {
   justify-content: flex-end;
   align-items: flex-end;
   gap: 4%;
-  padding: 0 5%; }
+  padding: 0 5%;
+}
 
 .task-button {
   padding: 2.5% 5.5%;
@@ -526,10 +586,12 @@ body {
   align-items: center;
   align-content: center;
   position: inherit;
-  display: grid; }
+  display: grid;
+}
 
 .task-button:hover {
-  background-color: #e8e8e8; }
+  background-color: #e8e8e8;
+}
 
 .task-window {
   position: absolute;
@@ -541,7 +603,8 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
   width: 70%;
   height: 80%;
-  z-index: 1; }
+  z-index: 1;
+}
 
 .Pages {
   background-color: #343434;
@@ -549,22 +612,26 @@ body {
   flex-direction: column;
   position: relative;
   gap: 5%;
-  transition: width 0.5s; }
+  transition: width 0.5s;
+}
 
 .Title-Courses,
 .Title-Tasks {
-  position: relative; }
+  position: relative;
+}
 
 .TitleText {
   height: calc(2vw + 2vh);
   overflow: hidden;
-  width: 100%; }
+  width: 100%;
+}
 
 .Title-Courses p,
 .Title-Tasks p {
   font-size: calc(2vw + 2vh);
   margin: 0 2% 0 2%;
-  width: 96%; }
+  width: 96%;
+}
 
 .Title-Courses::after,
 .Title-Tasks::after {
@@ -574,24 +641,33 @@ body {
   bottom: 0;
   width: 100%;
   height: 2px;
-  background-color: black; }
+  background-color: black;
+}
 
 .right-content {
   width: 100%;
   height: 100%;
   display: grid;
-  grid: "header" 10% "main" 85% "footer" 5% / 1fr; }
+  grid: "header" 10% "main" 85% "footer" 5%/1fr;
+}
 
 .Title-Courses {
-  display: none; }
+  display: none;
+}
 
 .Courses {
-  display: none; }
+  display: none;
+}
 
 .Course-Adder {
-  display: none; }
+  display: none;
+}
 
 @media screen and (max-width: 1500px) {
   .task-window {
     width: 100%;
-    height: 100%; } }
+    height: 100%;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

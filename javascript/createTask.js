@@ -12,52 +12,52 @@ document.addEventListener("DOMContentLoaded", function() {
   tasksSection.style.display = "none";
 
   discardButton.addEventListener("click", function() {
-    console.log("Discard button clicked!");
+    overlay.style.display = "none";
+    tasksSection.style.display = "none";
     taskTitleInput.value = "";
     taskDescriptionTextarea.value = "";
     dueDateInput.value = "";
     subjectSelect.value = "";
-    overlay.style.display = "none";
-    tasksSection.style.display = "none";
-    tasksSection.classList.remove("active");
   });
 
-  saveButton.addEventListener("click", function() {
-    console.log("Save button clicked!");
+  var storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  for (var i = 0; i < storedTasks.length; i++) {
+    createTask(storedTasks[i]);
+  }
+
+  function createTask(task) {
     var taskBox = document.createElement("div");
     taskBox.classList.add("task-box");
 
     var titleBox = document.createElement("div");
     titleBox.classList.add("task-title-box");
-    titleBox.textContent = taskTitleInput.value;
+    titleBox.textContent = task.title;
 
     var dateBox = document.createElement("div");
     dateBox.classList.add("task-date-box");
-    var date = new Date(dueDateInput.value);
+    var date = new Date(task.date);
     var month = date.toLocaleString('default', { month: 'short' });
     var day = date.getDate() + 1;
     dateBox.textContent = month + " " + day;
 
     var subjectBox = document.createElement("div");
     subjectBox.classList.add("task-subject-box");
-    subjectBox.textContent = subjectSelect.value;
+    subjectBox.textContent = task.subject;
 
     var descriptionBox = document.createElement("div");
     descriptionBox.classList.add("task-description-box");
-    descriptionBox.textContent = taskDescriptionTextarea.value;
+    descriptionBox.textContent = task.description;
 
     var completeButton = document.createElement("button");
     completeButton.classList.add("task-button-box");
     completeButton.textContent = "Complete";
 
-    taskContainer.appendChild(taskBox);
     taskBox.appendChild(titleBox);
     taskBox.appendChild(dateBox);
     taskBox.appendChild(subjectBox);
     taskBox.appendChild(descriptionBox);
     taskBox.appendChild(completeButton);
-
-    discardButton.click();
+    taskContainer.appendChild(taskBox);
 
     taskBox.addEventListener("click", function() {
       this.classList.toggle("expanded");
@@ -65,6 +65,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
     completeButton.addEventListener("click", function() {
       taskBox.remove();
+      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      var index = tasks.findIndex(t => t.title === task.title && t.date === task.date && t.subject === task.subject && t.description === task.description);
+      if (index > -1) {
+        tasks.splice(index, 1);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+      }
     });
+  }
+
+  saveButton.addEventListener("click", function() {
+    var newTask = {
+      title: taskTitleInput.value,
+      description: taskDescriptionTextarea.value,
+      date: dueDateInput.value,
+      subject: subjectSelect.value
+    };
+
+    createTask(newTask);
+
+    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.push(newTask);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    discardButton.click();
   });
 });
