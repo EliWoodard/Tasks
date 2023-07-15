@@ -1,0 +1,21 @@
+#settingsBox {
+    height: 8%;
+    width: 100%;
+    display: flex;
+    bottom: 0;
+    position: absolute;
+    overflow: hidden;
+}
+
+#settingsGearBox {
+    width: 30%;
+    height: 100%;
+}
+
+#settingsOverlay {
+    display: none;
+    width: 400px;
+    height: 400px;
+    z-index: 1;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);
+}

@@ -70,7 +70,8 @@
 .courses-button.active,
 .courses-button:hover {
   background-color: #2E8B57;
-  width: 80%; /* Adjust the width as per your preference */
+  width: 80%;
+  /* Adjust the width as per your preference */
 }
 
 .Task-Container,
@@ -156,4 +157,32 @@
   box-shadow: none;
   position: relative;
   top: .2em;
+}
+
+.settings-button {
+  background-color: transparent;
+  border: none;
+}
+
+#gearImage {
+  width: 80%;
+  margin: 0;
+  padding: 0;
+  filter: invert(50%);
+  transition: transform 0.8s ease, position 0.8s ease, top 0.8s ease;
+  position: relative; 
+  top: 0; 
+}
+
+#gearImage.expanded {
+  top: 5px;
+}
+
+#gearImage:hover {
+  animation: spin 2s 1 linear;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
