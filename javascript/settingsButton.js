@@ -5,6 +5,41 @@ document.addEventListener("DOMContentLoaded", function() {
   let mouseDown = false;
   let offsetX = 0, offsetY = 0;
 
+  // varaiables
+  var profileSettings = document.getElementById("profile-button");
+  var filterSettings = document.getElementById("filters-button");
+  var backgroundSettings = document.getElementById("background-button");
+  var colorSettings = document.getElementById("color-button");
+
+  profileSettings.addEventListener("click", function() {
+    profileSettings.classList.add("active");
+    filterSettings.classList.remove("active");
+    backgroundSettings.classList.remove("active");
+    colorSettings.classList.remove("active");
+  });
+
+  filterSettings.addEventListener("click", function() {
+    filterSettings.classList.add("active");
+    profileSettings.classList.remove("active");
+    backgroundSettings.classList.remove("active");
+    colorSettings.classList.remove("active");
+  });
+
+  backgroundSettings.addEventListener("click", function() {
+    backgroundSettings.classList.add("active");
+    profileSettings.classList.remove("active");
+    filterSettings.classList.remove("active");
+    colorSettings.classList.remove("active");
+  });
+
+  colorSettings.addEventListener("click", function() {
+    colorSettings.classList.add("active");
+    profileSettings.classList.remove("active");
+    filterSettings.classList.remove("active");
+    backgroundSettings.classList.remove("active");
+  });
+
+  //Cache
   const savedPosition = localStorage.getItem('settingsOverlayPosition');
   if (savedPosition) {
     const pos = JSON.parse(savedPosition);
@@ -36,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   gearImage.addEventListener('click', function(e) {
-    e.stopPropagation(); // Prevent event bubbling up.
-    settingsOverlay.style.display = settingsOverlay.style.display === 'none' ? 'block' : 'none';
+    e.stopPropagation(); 
+    settingsOverlay.style.display = settingsOverlay.style.display === 'flex' ? 'none' : 'flex';
   });
 });

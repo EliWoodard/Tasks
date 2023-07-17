@@ -33,8 +33,7 @@
   transform: translateY(-50%) rotate(180deg);
 }
 
-.home-button,
-.courses-button {
+.home-button {
   position: relative;
   background-color: #4CAF50;
   height: 8%;
@@ -45,9 +44,8 @@
   font-size: calc(1vw + 1vh);
   margin-top: 10%;
   margin-right: 10%;
-  cursor: pointer;
+  transition-duration: 0.4s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s, transform 0.3s;
   overflow: hidden;
 }
 
@@ -71,7 +69,6 @@
 .courses-button:hover {
   background-color: #2E8B57;
   width: 80%;
-  /* Adjust the width as per your preference */
 }
 
 .Task-Container,
