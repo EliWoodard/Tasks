@@ -28,36 +28,36 @@ document.addEventListener("DOMContentLoaded", function() {
   function createTask(task) {
     var taskBox = document.createElement("div");
     taskBox.classList.add("task-box");
-
+  
     var taskBoxColor = document.createElement("div");
     taskBoxColor.classList.add("task-color");
-
+  
     var textBox = document.createElement("div");
     textBox.classList.add("text-box");
-
+  
     var titleBox = document.createElement("div");
     titleBox.classList.add("task-title-box");
     titleBox.textContent = task.title;
-
+  
     var dateBox = document.createElement("div");
     dateBox.classList.add("task-date-box");
     var date = new Date(task.date);
     var month = date.toLocaleString('default', { month: 'short' });
     var day = date.getDate() + 1;
     dateBox.textContent = month + " " + day;
-
+  
     var subjectBox = document.createElement("div");
     subjectBox.classList.add("task-subject-box");
     subjectBox.textContent = task.subject;
-
+  
     var descriptionBox = document.createElement("div");
     descriptionBox.classList.add("task-description-box");
     descriptionBox.textContent = task.description;
-
+  
     var completeButton = document.createElement("button");
     completeButton.classList.add("task-button-box");
     completeButton.textContent = "Complete";
-
+  
     taskBox.appendChild(taskBoxColor);
     textBox.appendChild(titleBox);
     textBox.appendChild(subjectBox);
@@ -66,11 +66,11 @@ document.addEventListener("DOMContentLoaded", function() {
     taskBox.appendChild(descriptionBox);
     taskBox.appendChild(completeButton);
     taskContainer.appendChild(taskBox);
-
+  
     taskBox.addEventListener("click", function() {
       this.classList.toggle("expanded");
     });
-
+  
     completeButton.addEventListener("click", function() {
       taskBox.remove();
       var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -80,14 +80,31 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem('tasks', JSON.stringify(tasks));
       }
     });
+  
+    var selectedSubject = subjectSelect.value;
+    var courses = JSON.parse(localStorage.getItem('courses')) || [];
+    var selectedCourse = courses.find(function(course) {
+      return course.name === selectedSubject;
+    });
+    var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
+    taskBoxColor.style.backgroundColor = selectedCourseColor;
+    taskBoxColor.style.backgroundColor = task.color;
   }
 
   saveButton.addEventListener("click", function() {
+    var selectedSubject = subjectSelect.value;
+    var courses = JSON.parse(localStorage.getItem('courses')) || [];
+    var selectedCourse = courses.find(function(course) {
+      return course.name === selectedSubject;
+    });
+    var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
+
     var newTask = {
       title: taskTitleInput.value,
       description: taskDescriptionTextarea.value,
       date: dueDateInput.value,
-      subject: subjectSelect.value
+      subject: subjectSelect.value,
+      color: selectedCourseColor
     };
 
     createTask(newTask);

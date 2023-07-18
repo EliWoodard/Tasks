@@ -314,7 +314,7 @@ body {
 }
 
 .task-title-box {
-  font-size: calc(0.5vw + 0.5vh);
+  font-size: calc(0.6vw + 0.6vh);
   width: 100%;
   margin-top: 2%;
 }
