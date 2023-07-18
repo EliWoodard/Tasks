@@ -315,22 +315,34 @@ body {
 
 .task-title-box {
   font-size: calc(0.5vw + 0.5vh);
-  width: 77%;
+  width: 100%;
+  margin-top: 2%;
 }
 
 .task-box {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
   width: 30%;
   height: 10%;
   box-shadow: 0 2px 4px rgba(46, 139, 87, 0.4);
   margin: 2% 0 2% 2%;
-  padding: 1em;
-  flex-wrap: wrap;
-  align-content: center;
   transition: all 0.3s ease;
+  flex-wrap: wrap;
+}
+
+.task-color {
+  width: 5%;
+  height: 100%;
+  margin-right: 2%;
+}
+
+.text-box {
+  height: 100%;
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 2%;
 }
 
 .expanded {
@@ -345,7 +357,6 @@ body {
 .task-date-box,
 .task-subject-box,
 .task-title-box {
-  margin: 1%;
   overflow: hidden;
 }
 
@@ -355,17 +366,25 @@ body {
   justify-content: right;
   display: flex;
   width: 19%;
+  margin-top: 2%;
 }
 
 .task-subject-box {
   color: #777;
-  width: 48%;
+  width: 100%;
   font-size: calc(0.4vw + 0.4vh);
+  margin-top: 2%;
 }
 
 .task-description-box,
 .task-button-box {
   display: none;
+}
+
+.expanded .text-box,
+.expanded .task-color,
+.expanded .task-date-box {
+  height: 33%;
 }
 
 .expanded .task-description-box,

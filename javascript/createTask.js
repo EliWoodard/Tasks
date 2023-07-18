@@ -29,6 +29,12 @@ document.addEventListener("DOMContentLoaded", function() {
     var taskBox = document.createElement("div");
     taskBox.classList.add("task-box");
 
+    var taskBoxColor = document.createElement("div");
+    taskBoxColor.classList.add("task-color");
+
+    var textBox = document.createElement("div");
+    textBox.classList.add("text-box");
+
     var titleBox = document.createElement("div");
     titleBox.classList.add("task-title-box");
     titleBox.textContent = task.title;
@@ -52,9 +58,11 @@ document.addEventListener("DOMContentLoaded", function() {
     completeButton.classList.add("task-button-box");
     completeButton.textContent = "Complete";
 
-    taskBox.appendChild(titleBox);
+    taskBox.appendChild(taskBoxColor);
+    textBox.appendChild(titleBox);
+    textBox.appendChild(subjectBox);
+    taskBox.appendChild(textBox);
     taskBox.appendChild(dateBox);
-    taskBox.appendChild(subjectBox);
     taskBox.appendChild(descriptionBox);
     taskBox.appendChild(completeButton);
     taskContainer.appendChild(taskBox);
