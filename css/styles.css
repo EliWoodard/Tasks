@@ -331,6 +331,14 @@ body {
   flex-wrap: wrap;
 }
 
+.task-box.due-today {
+  box-shadow: 0 2px 4px rgba(225, 151, 10, 0.4);
+}
+
+.task-box.overdue {
+  box-shadow: 0 2px 4px rgba(192, 12, 12, 0.4);
+}
+
 .task-color {
   width: 5%;
   height: 100%;
@@ -352,6 +360,16 @@ body {
 .task-box:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(46, 139, 87, 0.3);
+}
+
+.due-today:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(225, 151, 10, 0.3);
+}
+
+.overdue:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(192, 12, 12, 0.3);
 }
 
 .task-date-box,

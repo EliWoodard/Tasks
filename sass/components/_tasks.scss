@@ -24,6 +24,14 @@
   flex-wrap: wrap;
 }
 
+.task-box.due-today {
+  box-shadow: 0 2px 4px #e1970a66;
+}
+
+.task-box.overdue {
+  box-shadow: 0 2px 4px #c00c0c66;
+}
+
 .task-color {
   width: 5%;
   height: 100%;
@@ -45,6 +53,16 @@
 .task-box:hover {
   transform: translateY(-5px); 
   box-shadow: 0 4px 8px rgba(#2E8B57, 0.3);  
+}
+
+.due-today:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0 4px 8px rgba(#e1970a66, 0.3);  
+}
+
+.overdue:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0 4px 8px rgba(#c00c0c66, 0.3);  
 }
 
 .task-date-box,

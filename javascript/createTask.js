@@ -41,10 +41,27 @@ document.addEventListener("DOMContentLoaded", function() {
   
     var dateBox = document.createElement("div");
     dateBox.classList.add("task-date-box");
-    var date = new Date(task.date);
+    var [year, month, day] = task.date.split('-').map(Number); 
+    month -= 1;
+    var date = new Date(year, month, day);
     var month = date.toLocaleString('default', { month: 'short' });
-    var day = date.getDate() + 1;
+    var day = date.getDate();
     dateBox.textContent = month + " " + day;
+    
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    
+    if (date.getTime() === today.getTime()) {
+      dateBox.style.color = "#e1970a";
+      taskBox.classList.add("due-today");
+    } else if (date < today) {
+      dateBox.style.color = "#bf0c0c";
+      taskBox.classList.add("overdue");
+    }
+
+    console.log(date.getTime());
+    console.log(today.getTime());
   
     var subjectBox = document.createElement("div");
     subjectBox.classList.add("task-subject-box");
