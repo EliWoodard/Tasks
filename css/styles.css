@@ -434,6 +434,13 @@ body {
   align-items: center;
 }
 
+#tasksOverlay {
+  display: none;
+  width: 600px;
+  height: 300px;
+  z-index: 1000;
+}
+
 .AddCourseWindow {
   position: relative;
   width: 15%;

@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var subjectSelect = document.querySelector("#subject-select");
   var overlay = document.querySelector(".overlay");
   var saveButton = document.querySelector("#save-button");
+  var tasksOverlay = document.querySelector("#tasksOverlay");
 
   tasksSection.style.display = "none";
 
@@ -86,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     taskBox.addEventListener("click", function() {
       this.classList.toggle("expanded");
+      showTasksOverlay(task);
     });
   
     completeButton.addEventListener("click", function() {
@@ -106,6 +108,27 @@ document.addEventListener("DOMContentLoaded", function() {
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
     taskBoxColor.style.backgroundColor = selectedCourseColor;
     taskBoxColor.style.backgroundColor = task.color;
+  }
+
+  function showTasksOverlay(task) {
+    overlay.style.display = "block";
+    tasksOverlay.style.display = "block";
+    var courses = JSON.parse(localStorage.getItem('courses')) || [];
+    var selectedCourse = courses.find(function(course) {
+      return course.name === task.subject;
+    });
+    var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
+    tasksOverlay.style.backgroundColor = selectedCourseColor;
+  }
+
+  function hideTasksOverlay() {
+    overlay.style.display = "none";
+    tasksSection.style.display = "none";
+    tasksOverlay.style.display = "none";
+    taskTitleInput.value = "";
+    taskDescriptionTextarea.value = "";
+    dueDateInput.value = "";
+    subjectSelect.value = "";
   }
 
   saveButton.addEventListener("click", function() {
