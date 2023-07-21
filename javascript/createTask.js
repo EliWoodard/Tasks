@@ -139,8 +139,10 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
 
+    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
     var newTask = {
-      id: tasks.length + 1,
+      id: (tasks.length || 0) + 1, // add an id to each new task
       title: taskTitleInput.value,
       description: taskDescriptionTextarea.value,
       date: dueDateInput.value,
@@ -176,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
   
     var updatedTask = {
+      id: tasksOverlay.task.id, // set the id of the updated task
       title: title,
       description: description,
       date: date,
