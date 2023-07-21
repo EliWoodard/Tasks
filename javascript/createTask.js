@@ -9,17 +9,9 @@ document.addEventListener("DOMContentLoaded", function() {
   var overlay = document.querySelector(".overlay");
   var saveButton = document.querySelector("#save-button");
   var tasksOverlay = document.querySelector("#tasksOverlay");
+  var tasksOverlayLeft = document.querySelector("#tasksOverlayLeft");
 
   tasksSection.style.display = "none";
-
-  discardButton.addEventListener("click", function() {
-    overlay.style.display = "none";
-    tasksSection.style.display = "none";
-    taskTitleInput.value = "";
-    taskDescriptionTextarea.value = "";
-    dueDateInput.value = "";
-    subjectSelect.value = "";
-  });
 
   var storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
   for (var i = 0; i < storedTasks.length; i++) {
@@ -72,32 +64,17 @@ document.addEventListener("DOMContentLoaded", function() {
     descriptionBox.classList.add("task-description-box");
     descriptionBox.textContent = task.description;
   
-    var completeButton = document.createElement("button");
-    completeButton.classList.add("task-button-box");
-    completeButton.textContent = "Complete";
-  
     taskBox.appendChild(taskBoxColor);
     textBox.appendChild(titleBox);
     textBox.appendChild(subjectBox);
     taskBox.appendChild(textBox);
     taskBox.appendChild(dateBox);
     taskBox.appendChild(descriptionBox);
-    taskBox.appendChild(completeButton);
     taskContainer.appendChild(taskBox);
   
     taskBox.addEventListener("click", function() {
-      this.classList.toggle("expanded");
       showTasksOverlay(task);
-    });
-  
-    completeButton.addEventListener("click", function() {
-      taskBox.remove();
-      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-      var index = tasks.findIndex(t => t.title === task.title && t.date === task.date && t.subject === task.subject && t.description === task.description);
-      if (index > -1) {
-        tasks.splice(index, 1);
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-      }
+      tasksOverlay.taskBox = taskBox;
     });
   
     var selectedSubject = subjectSelect.value;
@@ -111,16 +88,34 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function showTasksOverlay(task) {
-    overlay.style.display = "block";
-    tasksOverlay.style.display = "block";
+    overlay.style.display = "flex";
+    tasksOverlay.style.display = "flex";
+    tasksOverlayLeft.style.display = "flex";
+  
+    document.querySelector('#taskTitle').value = task.title;
+    document.querySelector('#taskSubject').value = task.subject;
+    document.querySelector('#taskDate').value = task.date;
+    document.querySelector('#taskDescription').value = task.description;
+    
+    var [year, month, day] = task.date.split('-').map(Number);
+    month -= 1;
+    var date = new Date(year, month, day);
+    var month = date.toLocaleString('default', { month: 'short' });
+    var day = date.getDate();
+    document.querySelector('#taskDate').textContent = month + " " + day;
+    
+    document.querySelector('#taskDescription').textContent = task.description;
+  
     var courses = JSON.parse(localStorage.getItem('courses')) || [];
     var selectedCourse = courses.find(function(course) {
       return course.name === task.subject;
     });
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-    tasksOverlay.style.backgroundColor = selectedCourseColor;
-  }
+    tasksOverlayLeft.style.backgroundColor = selectedCourseColor;
 
+    tasksOverlay.taskBox = task.taskBox;
+  }
+  
   function hideTasksOverlay() {
     overlay.style.display = "none";
     tasksSection.style.display = "none";
@@ -154,5 +149,41 @@ document.addEventListener("DOMContentLoaded", function() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 
     discardButton.click();
+  });
+
+  overlay.addEventListener('click', function(event) {
+    if (event.target === overlay) {  
+      hideTasksOverlay();
+    }
+  });
+
+  discardButton.addEventListener("click", function() {
+    overlay.style.display = "none";
+    tasksSection.style.display = "none";
+    taskTitleInput.value = "";
+    taskDescriptionTextarea.value = "";
+    dueDateInput.value = "";
+    subjectSelect.value = "";
+  });
+
+  document.querySelector('#discardButton').addEventListener('click', function() {
+    hideTasksOverlay();
+  });    
+
+  document.querySelector('#completeButton').addEventListener("click", function() {
+    var title = document.querySelector('#taskTitle').value;
+    var date = document.querySelector('#taskDate').value;
+    var subject = document.querySelector('#taskSubject').value;
+    var description = document.querySelector('#taskDescription').value;
+  
+    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    var index = tasks.findIndex(t => t.title === title && t.date === date && t.subject === subject && t.description === description);
+    if (index > -1) {
+      tasks.splice(index, 1);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      tasksOverlay.taskBox.remove(); // remove the current task box from the DOM
+    }
+  
+    hideTasksOverlay();
   });
 });

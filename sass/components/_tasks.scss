@@ -130,7 +130,67 @@
 
 #tasksOverlay {
   display: none;
+  position: absolute;
   width: 600px;
   height: 300px;
-  z-index: 1000;
+  z-index: 10;
+  box-sizing: border-box;
+  flex-direction: row;
+  background-color: #e7e7e7;
+}
+
+#tasksOverlayLeft {
+  width: 5%;
+  height: 100%;
+}
+
+#tasksColumn {
+  width: 95%;
+  height: 100%;
+  margin-left: 2%;
+  display: flex;
+  flex-direction: column;
+}
+
+#taskTitle {
+  width: 90%;
+  height: 10%;
+  font-size: calc(1.2vh + 1.2vw);
+  display: flex;
+  align-items: center;
+  margin-top: 2%;
+}
+
+#taskOverlayOrganization {
+  display: flex;
+  margin-top: 2%;
+}
+
+#taskSubject, #taskDate {
+  display: inline-block;
+  width: calc(50% - 10px);
+}
+
+#taskDescription {
+  border: 1px solid #000;
+  padding: 10px;
+  margin: 10px 0;
+  margin-top: 2%;
+}
+
+#discardButton {
+  
+}
+
+#saveButton {
+
+}
+
+#completeButton {
+
+}
+
+
+#taskOverlayButtons {
+  display: flex;
 }
