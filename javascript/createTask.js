@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     taskBox.addEventListener("click", function() {
       var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-      var currentTask = tasks.find(t => t.title === task.title && t.date === task.date && t.subject === task.subject && t.description === task.description);
+      var currentTask = tasks.find(t => t.id === task.id);
       showTasksOverlay(currentTask, taskBox);
     });
   
@@ -140,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
 
     var newTask = {
+      id: tasks.length + 1,
       title: taskTitleInput.value,
       description: taskDescriptionTextarea.value,
       date: dueDateInput.value,
@@ -161,46 +162,47 @@ document.addEventListener("DOMContentLoaded", function() {
     var date = document.querySelector('#taskDate').value;
     var subject = document.querySelector('#taskSubject').value;
     var description = document.querySelector('#taskDescription').value;
-
+  
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    var index = tasks.findIndex(t => t.title === tasksOverlay.task.title && t.date === tasksOverlay.task.date && t.subject === tasksOverlay.task.subject && t.description === tasksOverlay.task.description);
-
+    var index = tasks.findIndex(t => t.id === tasksOverlay.task.id); // find task by id
+  
+  
+    // Create the updated task
+    var selectedSubject = document.querySelector('#taskSubject').value;
+    var courses = JSON.parse(localStorage.getItem('courses')) || [];
+    var selectedCourse = courses.find(function(course) {
+      return course.name === selectedSubject;
+    });
+    var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
+  
+    var updatedTask = {
+      title: title,
+      description: description,
+      date: date,
+      subject: subject,
+      color: selectedCourseColor
+    };
+  
     if (index > -1) {
-      // Remove the old task from the array
-      tasks.splice(index, 1);
-
-      // Create the updated task
-      var selectedSubject = document.querySelector('#taskSubject').value;
-      var courses = JSON.parse(localStorage.getItem('courses')) || [];
-      var selectedCourse = courses.find(function(course) {
-        return course.name === selectedSubject;
-      });
-      var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-
-      var updatedTask = {
-        title: title,
-        description: description,
-        date: date,
-        subject: subject,
-        color: selectedCourseColor
-      };
-
-      // Add the updated task to the array
+      // Remove the old task from the array and add the updated task
+      tasks.splice(index, 1, updatedTask);
+    } else {
+      // Add the new task to the array
       tasks.push(updatedTask);
-      
-      var taskBox = tasksOverlay.taskBox;
-      taskBox.querySelector('.task-title-box').textContent = title;
-      taskBox.querySelector('.task-subject-box').textContent = subject;
-      taskBox.querySelector('.task-description-box').textContent = description;
-      taskBox.querySelector('.task-date-box').textContent = new Date(date).toLocaleString('default', { month: 'short' }) + " " + new Date(date).getDate();
-      
-      // Update the 'task' object in 'tasksOverlay'
-      tasksOverlay.task = updatedTask;
-      
-      // Save the updated tasks array to localStorage
-      localStorage.setItem('tasks', JSON.stringify(tasks));
     }
-
+  
+    var taskBox = tasksOverlay.taskBox;
+    taskBox.querySelector('.task-title-box').textContent = title;
+    taskBox.querySelector('.task-subject-box').textContent = subject;
+    taskBox.querySelector('.task-description-box').textContent = description;
+    taskBox.querySelector('.task-date-box').textContent = new Date(date).toLocaleString('default', { month: 'short' }) + " " + new Date(date).getDate();
+  
+    // Update the 'task' object in 'tasksOverlay'
+    tasksOverlay.task = updatedTask;
+  
+    // Save the updated tasks array to localStorage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  
     hideTasksOverlay();
 });
 
