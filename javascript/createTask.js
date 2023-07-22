@@ -88,6 +88,16 @@ document.addEventListener("DOMContentLoaded", function () {
     taskBoxColor.style.backgroundColor = task.color;
   }
 
+  var courses = JSON.parse(localStorage.getItem('courses')) || [];
+  var taskSubjectSelect = document.querySelector('#taskSubject');
+
+  courses.forEach(function (course) {
+    var option = document.createElement('option');
+    option.value = course.name;
+    option.textContent = course.name;
+    taskSubjectSelect.appendChild(option);
+  });
+
   function showTasksOverlay(task, taskBox) {
     overlay.style.display = "flex";
     tasksOverlay.style.display = "flex";
@@ -110,8 +120,30 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector('#taskDescription').textContent = task.description;
 
     var courses = JSON.parse(localStorage.getItem('courses')) || [];
+    var taskSubjectSelect = document.querySelector('#taskSubject');
+
+    // Clear the options in the select element
+    taskSubjectSelect.innerHTML = '';
+
+    var selectedSubject = task.subject;
+    taskSubjectSelect.value = selectedSubject;
+
+    courses.forEach(function (course) {
+      var option = document.createElement('option');
+      option.value = course.name;
+      option.textContent = course.name;
+      taskSubjectSelect.appendChild(option);
+    });
+
     var selectedCourse = courses.find(function (course) {
       return course.name === task.subject;
+    });
+
+    var selectedSubject = task.subject;
+    taskSubjectSelect.value = selectedSubject;
+
+    var selectedCourse = courses.find(function (course) {
+      return course.name === selectedSubject;
     });
 
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
@@ -176,10 +208,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var index = tasks.findIndex(t => t.id === tasksOverlay.task.id);
 
     var selectedSubject = document.querySelector('#taskSubject').value;
-    var courses = JSON.parse(localStorage.getItem('courses')) || [];
     var selectedCourse = courses.find(function (course) {
       return course.name === selectedSubject;
     });
+
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
 
     var [year, month, day] = dateString.split('-').map(Number);
@@ -225,6 +257,11 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       dateBox.style.color = "#2E8B57";
     }
+
+    var taskColor = taskBox.querySelector('.task-color');
+    taskColor.style.backgroundColor = updatedTask.color;
+
+    tasksOverlayLeft.style.backgroundColor = updatedTask.color;
 
     tasksOverlay.task = updatedTask;
 
