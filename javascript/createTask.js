@@ -139,9 +139,9 @@ document.addEventListener("DOMContentLoaded", function() {
       return course.name === selectedSubject;
     });
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-
+  
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
+  
     var newTask = {
       id: (tasks.length || 0) + 1, 
       title: taskTitleInput.value,
@@ -150,19 +150,19 @@ document.addEventListener("DOMContentLoaded", function() {
       subject: subjectSelect.value,
       color: selectedCourseColor
     };
-
+  
     createTask(newTask);
-
+  
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     tasks.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-
-    discardButton.click();
+  
+    hideTasksOverlay();  // Add this line
   });
 
   document.querySelector('#saveButton').addEventListener("click", function() {
     var title = document.querySelector('#taskTitle').value;
-    var date = document.querySelector('#taskDate').value;
+    var dateString = document.querySelector('#taskDate').value;
     var subject = document.querySelector('#taskSubject').value;
     var description = document.querySelector('#taskDescription').value;
   
@@ -176,11 +176,15 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
   
+    var [year, month, day] = dateString.split('-').map(Number);
+    month -= 1;
+    var date = new Date(year, month, day);
+
     var updatedTask = {
       id: tasksOverlay.task.id, 
       title: title,
       description: description,
-      date: date,
+      date: dateString,
       subject: subject,
       color: selectedCourseColor
     };
@@ -195,14 +199,16 @@ document.addEventListener("DOMContentLoaded", function() {
     taskBox.querySelector('.task-title-box').textContent = title;
     taskBox.querySelector('.task-subject-box').textContent = subject;
     taskBox.querySelector('.task-description-box').textContent = description;
-    taskBox.querySelector('.task-date-box').textContent = new Date(date).toLocaleString('default', { month: 'short' }) + " " + new Date(date).getDate();
-  
+    taskBox.querySelector('.task-date-box').textContent = date.toLocaleString('default', { month: 'short' }) + " " + date.getDate();
+    taskBox.querySelector('.task-color').style.backgroundColor = selectedCourseColor;
+
     tasksOverlay.task = updatedTask;
   
     localStorage.setItem('tasks', JSON.stringify(tasks));
   
     hideTasksOverlay();
 });
+
 
   overlay.addEventListener('click', function(event) {
     if (event.target === overlay) {  
