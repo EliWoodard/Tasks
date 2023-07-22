@@ -399,17 +399,6 @@ body {
   display: none;
 }
 
-.expanded .text-box,
-.expanded .task-color,
-.expanded .task-date-box {
-  height: 33%;
-}
-
-.expanded .task-description-box,
-.expanded .task-button-box {
-  display: flex;
-}
-
 .task-description-box {
   width: 98%;
   height: 40%;

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   var discardButton = document.querySelector("#discard-button");
   var tasksSection = document.querySelector(".AddTaskWindow");
   var taskContainer = document.querySelector(".Tasks");
@@ -21,30 +21,31 @@ document.addEventListener("DOMContentLoaded", function() {
   function createTask(task) {
     var taskBox = document.createElement("div");
     taskBox.classList.add("task-box");
-  
+
     var taskBoxColor = document.createElement("div");
     taskBoxColor.classList.add("task-color");
-  
+    taskBoxColor.style.backgroundColor = task.color;
+
     var textBox = document.createElement("div");
     textBox.classList.add("text-box");
-  
+
     var titleBox = document.createElement("div");
     titleBox.classList.add("task-title-box");
     titleBox.textContent = task.title;
-  
+
     var dateBox = document.createElement("div");
     dateBox.classList.add("task-date-box");
-    var [year, month, day] = task.date.split('-').map(Number); 
+    var [year, month, day] = task.date.split('-').map(Number);
     month -= 1;
     var date = new Date(year, month, day);
     var month = date.toLocaleString('default', { month: 'short' });
     var day = date.getDate();
     dateBox.textContent = month + " " + day;
-    
+
     var today = new Date();
     today.setHours(0, 0, 0, 0);
     date.setHours(0, 0, 0, 0);
-    
+
     if (date.getTime() === today.getTime()) {
       dateBox.style.color = "#e1970a";
       taskBox.classList.add("due-today");
@@ -55,15 +56,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
     console.log(date.getTime());
     console.log(today.getTime());
-  
+
     var subjectBox = document.createElement("div");
     subjectBox.classList.add("task-subject-box");
     subjectBox.textContent = task.subject;
-  
+
     var descriptionBox = document.createElement("div");
     descriptionBox.classList.add("task-description-box");
     descriptionBox.textContent = task.description;
-  
+
     taskBox.appendChild(taskBoxColor);
     textBox.appendChild(titleBox);
     textBox.appendChild(subjectBox);
@@ -71,20 +72,19 @@ document.addEventListener("DOMContentLoaded", function() {
     taskBox.appendChild(dateBox);
     taskBox.appendChild(descriptionBox);
     taskContainer.appendChild(taskBox);
-  
-    taskBox.addEventListener("click", function() {
+
+    taskBox.addEventListener("click", function () {
       var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
       var currentTask = tasks.find(t => t.id === task.id);
       showTasksOverlay(currentTask, taskBox);
     });
-  
+
     var selectedSubject = subjectSelect.value;
     var courses = JSON.parse(localStorage.getItem('courses')) || [];
-    var selectedCourse = courses.find(function(course) {
+    var selectedCourse = courses.find(function (course) {
       return course.name === selectedSubject;
     });
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-    taskBoxColor.style.backgroundColor = selectedCourseColor;
     taskBoxColor.style.backgroundColor = task.color;
   }
 
@@ -92,36 +92,36 @@ document.addEventListener("DOMContentLoaded", function() {
     overlay.style.display = "flex";
     tasksOverlay.style.display = "flex";
     tasksOverlayLeft.style.display = "flex";
-  
+
     if (task) {
       document.querySelector('#taskTitle').value = task.title;
       document.querySelector('#taskSubject').value = task.subject;
       document.querySelector('#taskDate').value = task.date;
       document.querySelector('#taskDescription').value = task.description;
     }
-  
+
     var [year, month, day] = task.date.split('-').map(Number);
     month -= 1;
     var date = new Date(year, month, day);
     var monthName = date.toLocaleString('default', { month: 'short' });
     var dayNumber = date.getDate();
     document.querySelector('#taskDate').textContent = monthName + " " + dayNumber;
-  
+
     document.querySelector('#taskDescription').textContent = task.description;
-  
+
     var courses = JSON.parse(localStorage.getItem('courses')) || [];
     var selectedCourse = courses.find(function (course) {
       return course.name === task.subject;
     });
-  
+
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
     tasksOverlayLeft.style.backgroundColor = selectedCourseColor;
-  
+
     tasksOverlay.task = task;
     tasksOverlay.taskBox = taskBox;
   }
-  
-  
+
+
   function hideTasksOverlay() {
     overlay.style.display = "none";
     tasksSection.style.display = "none";
@@ -132,91 +132,114 @@ document.addEventListener("DOMContentLoaded", function() {
     subjectSelect.value = "";
   }
 
-  saveButton.addEventListener("click", function() {
+  /**
+   * @description save button used in the creation of new tasks or the AddTaskWindow.
+   */
+  saveButton.addEventListener("click", function () {
     var selectedSubject = subjectSelect.value;
     var courses = JSON.parse(localStorage.getItem('courses')) || [];
-    var selectedCourse = courses.find(function(course) {
+    var selectedCourse = courses.find(function (course) {
       return course.name === selectedSubject;
     });
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-  
+
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  
+
     var newTask = {
-      id: (tasks.length || 0) + 1, 
+      id: (tasks.length || 0) + 1,
       title: taskTitleInput.value,
       description: taskDescriptionTextarea.value,
       date: dueDateInput.value,
       subject: subjectSelect.value,
       color: selectedCourseColor
     };
-  
+
     createTask(newTask);
-  
+
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     tasks.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-  
-    hideTasksOverlay();  // Add this line
+
+    hideTasksOverlay();
   });
 
-  document.querySelector('#saveButton').addEventListener("click", function() {
+  /**
+   * @description used in the taskOverlay for saving edits to an existing task.
+   */
+  document.querySelector('#saveButton').addEventListener("click", function () {
     var title = document.querySelector('#taskTitle').value;
     var dateString = document.querySelector('#taskDate').value;
     var subject = document.querySelector('#taskSubject').value;
     var description = document.querySelector('#taskDescription').value;
-  
+
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     var index = tasks.findIndex(t => t.id === tasksOverlay.task.id);
-  
+
     var selectedSubject = document.querySelector('#taskSubject').value;
     var courses = JSON.parse(localStorage.getItem('courses')) || [];
-    var selectedCourse = courses.find(function(course) {
+    var selectedCourse = courses.find(function (course) {
       return course.name === selectedSubject;
     });
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-  
+
     var [year, month, day] = dateString.split('-').map(Number);
     month -= 1;
     var date = new Date(year, month, day);
 
     var updatedTask = {
-      id: tasksOverlay.task.id, 
+      id: tasksOverlay.task.id,
       title: title,
       description: description,
       date: dateString,
       subject: subject,
       color: selectedCourseColor
     };
-  
+
     if (index > -1) {
       tasks.splice(index, 1, updatedTask);
     } else {
       tasks.push(updatedTask);
     }
-  
+
     var taskBox = tasksOverlay.taskBox;
     taskBox.querySelector('.task-title-box').textContent = title;
     taskBox.querySelector('.task-subject-box').textContent = subject;
     taskBox.querySelector('.task-description-box').textContent = description;
-    taskBox.querySelector('.task-date-box').textContent = date.toLocaleString('default', { month: 'short' }) + " " + date.getDate();
-    taskBox.querySelector('.task-color').style.backgroundColor = selectedCourseColor;
+
+    var dateBox = taskBox.querySelector('.task-date-box');
+    dateBox.textContent = date.toLocaleString('default', { month: 'short' }) + " " + date.getDate();
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+
+    taskBox.classList.remove("due-today");
+    taskBox.classList.remove("overdue");
+
+    if (date.getTime() === today.getTime()) {
+      dateBox.style.color = "#e1970a";
+      taskBox.classList.add("due-today");
+    } else if (date < today) {
+      dateBox.style.color = "#bf0c0c";
+      taskBox.classList.add("overdue");
+    } else {
+      dateBox.style.color = "#2E8B57";
+    }
 
     tasksOverlay.task = updatedTask;
-  
+
     localStorage.setItem('tasks', JSON.stringify(tasks));
-  
+
     hideTasksOverlay();
-});
+  });
 
-
-  overlay.addEventListener('click', function(event) {
-    if (event.target === overlay) {  
+  overlay.addEventListener('click', function (event) {
+    if (event.target === overlay) {
       hideTasksOverlay();
     }
   });
 
-  discardButton.addEventListener("click", function() {
+  discardButton.addEventListener("click", function () {
     overlay.style.display = "none";
     tasksSection.style.display = "none";
     taskTitleInput.value = "";
@@ -225,24 +248,24 @@ document.addEventListener("DOMContentLoaded", function() {
     subjectSelect.value = "";
   });
 
-  document.querySelector('#discardButton').addEventListener('click', function() {
+  document.querySelector('#discardButton').addEventListener('click', function () {
     hideTasksOverlay();
-  });    
+  });
 
-  document.querySelector('#completeButton').addEventListener("click", function() {
+  document.querySelector('#completeButton').addEventListener("click", function () {
     var title = document.querySelector('#taskTitle').value;
     var date = document.querySelector('#taskDate').value;
     var subject = document.querySelector('#taskSubject').value;
     var description = document.querySelector('#taskDescription').value;
-  
+
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     var index = tasks.findIndex(t => t.title === title && t.date === date && t.subject === subject && t.description === description);
     if (index > -1) {
       tasks.splice(index, 1);
       localStorage.setItem('tasks', JSON.stringify(tasks));
-      tasksOverlay.taskBox.remove(); 
+      tasksOverlay.taskBox.remove();
     }
-  
+
     hideTasksOverlay();
   });
 });
