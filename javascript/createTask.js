@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelector('#taskSubject').value = task.subject;
       document.querySelector('#taskDate').value = task.date;
       document.querySelector('#taskDescription').value = task.description;
-    }
+  }
 
     var [year, month, day] = task.date.split('-').map(Number);
     month -= 1;
@@ -120,14 +120,19 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector('#taskDescription').textContent = task.description;
 
     var courses = JSON.parse(localStorage.getItem('courses')) || [];
-    var taskSubjectSelect = document.querySelector('#taskSubject');
 
+    if (!courses.some(course => course.name === task.subject)) {
+      task.subject = 'No Subject';
+    }
+    
+    var taskSubjectSelect = document.querySelector('#taskSubject');
+    
     // Clear the options in the select element
     taskSubjectSelect.innerHTML = '';
-
+    
     var selectedSubject = task.subject;
     taskSubjectSelect.value = selectedSubject;
-
+    
     courses.forEach(function (course) {
       var option = document.createElement('option');
       option.value = course.name;
@@ -136,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     var selectedCourse = courses.find(function (course) {
-      return course.name === task.subject;
+      return course.name === selectedSubject;
     });
 
     var selectedSubject = task.subject;
@@ -148,6 +153,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
     tasksOverlayLeft.style.backgroundColor = selectedCourseColor;
+
+    // Update the task-color
+    var taskColor = taskBox.querySelector('.task-color');
+    taskColor.style.backgroundColor = selectedCourseColor;
 
     tasksOverlay.task = task;
     tasksOverlay.taskBox = taskBox;
@@ -203,6 +212,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var dateString = document.querySelector('#taskDate').value;
     var subject = document.querySelector('#taskSubject').value;
     var description = document.querySelector('#taskDescription').value;
+
+    var courses = JSON.parse(localStorage.getItem('courses')) || [];
 
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     var index = tasks.findIndex(t => t.id === tasksOverlay.task.id);
