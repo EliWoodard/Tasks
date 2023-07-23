@@ -152,11 +152,16 @@
 #taskOverlayOrganization {
   display: flex;
   margin-top: 2%;
+  height: 8%;
 }
 
 #taskSubject, #taskDate {
   display: inline-block;
-  width: calc(50% - 10px);
+  width: 40%;
+}
+
+#taskSubject {
+  margin-right: 10%;
 }
 
 #taskDescription {
@@ -164,21 +169,41 @@
   padding: 10px;
   margin: 10px 0;
   margin-top: 2%;
+  width: 90%;
+  height: 42%;
+  resize: none;
 }
-
-#discardButton {
-  
-}
-
-#saveButton {
-
-}
-
-#completeButton {
-
-}
-
 
 #taskOverlayButtons {
   display: flex;
+  height: 40%;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+#discardButton, #saveButton, #completeButton {
+  height: 35%;
+  background-color: #2E8B57; 
+  color: white; 
+  border: none; 
+  padding: 10px 24px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; 
+  display: inline-block;
+  font-size: 16px; 
+  margin: 2px 2px; 
+  transition-duration: 0.4s; 
+  cursor: pointer; 
+}
+
+#discardButton:hover, #saveButton:hover, #completeButton:hover {
+  background-color: #006e30; 
+  color: white; 
+}
+
+#discardButton:active, #saveButton:active, #completeButton:active {
+  background-color: gray;
+  color: white; 
 }
