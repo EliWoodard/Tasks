@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
   const gearImage = document.getElementById('gearImage');
   const settingsOverlay = document.getElementById('settingsOverlay');
+  const closeButton = document.querySelector('#closeButton');
 
   let mouseDown = false;
   let offsetX = 0, offsetY = 0;
@@ -73,5 +74,9 @@ document.addEventListener("DOMContentLoaded", function() {
   gearImage.addEventListener('click', function(e) {
     e.stopPropagation(); 
     settingsOverlay.style.display = settingsOverlay.style.display === 'flex' ? 'none' : 'flex';
+  });
+
+  closeButton.addEventListener('click', function() {
+    settingsOverlay.style.display = 'none';
   });
 });

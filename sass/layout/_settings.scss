@@ -52,3 +52,25 @@
     background-color: #2E8B57; 
     color: white;
 }
+
+#closeButtonSection {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#closeButton {
+    font-size: 30px;
+    margin: 2% 4% 0 0;
+    cursor: pointer;
+    color: white;
+    width: auto;
+    display: flex;
+    height: 37px;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+#closeButton:hover {
+    color: rgb(167, 0, 0);
+}
