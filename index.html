@@ -11,6 +11,7 @@
   <script src="javascript/pressCreateTask.js"></script>
   <script src="javascript/createTask.js"></script>
   <script src="javascript/settingsButton.js"></script>
+  <script src="javascript/suggestions.js"></script>
   <meta charset="utf-8">
   <title>Tasks</title>
 </head>
@@ -27,6 +28,11 @@
         <div id="settingsGearBox">
           <button type="button" class="settings-button">
             <img id="gearImage" src="Images/gear.png" alt="gear">
+          </button>
+        </div>
+        <div id="suggestionContainer">
+          <button type="button" id="suggestionBox">
+            <img id="mailBoxImage" src="Images/mailBoxImage.png" alt="mail-box">
           </button>
         </div>
       </div>
@@ -142,10 +148,10 @@
         <button id="completeButton">Complete</button>
       </div>
     </div>
-</div>
+  </div>
 
+  <div id="suggestionOverlay">
 
-  
+  </div>
 </body>
-
 </html>

@@ -166,17 +166,17 @@
   margin: 0;
   padding: 0;
   filter: invert(50%);
-  transition: transform 0.8s ease, position 0.8s ease, top 0.8s ease;
+  transition: transform 0.8s ease, position 0.8s ease, top 0.2s ease;
   position: relative; 
   top: 0; 
 }
 
-#gearImage.expanded {
-  top: 5px;
-}
-
 #gearImage:hover {
   animation: spin 2s 1 linear;
+}
+
+#gearImage:active {
+  top: 3px;
 }
 
 @keyframes spin {
