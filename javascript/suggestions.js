@@ -1,5 +1,3 @@
-const fs = require('fs')
-
 document.addEventListener("DOMContentLoaded", function() {
     const suggestionOverlay = document.getElementById('suggestionOverlay');
     const submitSuggestion = document.getElementById('submitSuggestion');
@@ -11,23 +9,20 @@ document.addEventListener("DOMContentLoaded", function() {
         suggestionOverlay.style.display = suggestionOverlay.style.display === 'flex' ? 'none' : 'flex';
     });
 
-    submitSuggestion.addEventListener("click", function() {
+    function updateEmailLink() {
         const suggestion = suggestionDescription.value;
         const type = suggestionType.value;
-        
-        let filename;
-        if(type === "Bug"){
-            filename = 'bug.txt';
-        } else if (type === "Enhancement"){
-            filename = 'enhancement.txt';
-        }
+        submitSuggestion.href = `mailto:elijahwoodard136.com?subject=Suggestion: ${type}&body=${suggestion}`;
+    }
 
-        fs.writeFile(filename, suggestion, (err) => {
-            if (err) throw err;
-            console.log("The file is updated with the given data");
-        });
+    suggestionDescription.addEventListener('input', updateEmailLink);
+    suggestionType.addEventListener('change', updateEmailLink);
 
+    submitSuggestion.addEventListener("click", function() {
         suggestionDescription.value = '';
         suggestionOverlay.style.display = 'none';
+        updateEmailLink();  
     });
+
+    updateEmailLink();
 });

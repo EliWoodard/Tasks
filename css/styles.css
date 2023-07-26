@@ -896,6 +896,10 @@ body {
   background-color: #2E8B57;
   color: #fff;
   margin-right: 2%;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 #submitSuggestion:active {
