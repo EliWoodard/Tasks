@@ -30,8 +30,54 @@
     position: absolute;
     width: 300px;
     height: 140px;
-    background-color: #c3c3c3;
+    background-color: #343434;
     z-index: 1;
     box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);
-    flex-direction: row
+    flex-direction: column;
+}
+
+#suggestionTitle {
+    height: 15%;
+    margin-left: 2%;
+    font-size: 100%;
+    color: #2E8B57;
+}
+
+#suggestionDescription {
+    height: 50%;
+    width: 96%;
+    resize: none;
+    margin: 0 2% 2% 2%;
+    background: #343434;
+    color: #fff;
+    outline: none; 
+}
+
+#suggestionOverlayContainer {
+    height: 16%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#suggestionType {
+    height: 100%;
+    margin-right: 5%;
+    width: 36%;
+    background: #2E8B57;
+    color: #fff;
+}
+
+#submitSuggestion {
+    height: 100%;
+    width: 22%;
+    border: none;
+    border-radius: 0;
+    background-color: #2E8B57;
+    color: #fff;
+    margin-right: 2%;
+}
+
+#submitSuggestion:active {
+    background-color: #747474;
 }
