@@ -58,6 +58,9 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    position: absolute;
+    right: 1%;
+    top: 1%;
 }
 
 #closeButton {
@@ -74,4 +77,27 @@
 
 #closeButton:hover {
     color: rgb(167, 0, 0);
+}
+
+#profilePage {
+    display: flex;
+}
+
+#settingsHeader {
+    font-size: 100%;
+    width: 99%;
+    right: -1%;
+    position: relative;
+}
+
+#filterPage {
+    display: none;
+}
+
+#backgroundPage {
+    display: none;
+}
+
+#colorSchemePage {
+    display: none;
 }
