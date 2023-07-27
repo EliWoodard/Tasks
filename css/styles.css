@@ -823,6 +823,7 @@ body {
 
 #profilePage {
   display: flex;
+  flex-direction: column;
 }
 
 #settingsHeader {

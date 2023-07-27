@@ -74,9 +74,32 @@ document.addEventListener("DOMContentLoaded", function() {
   gearImage.addEventListener('click', function(e) {
     e.stopPropagation(); 
     settingsOverlay.style.display = settingsOverlay.style.display === 'flex' ? 'none' : 'flex';
+
+    calculateCacheSize();
   });
 
   closeButton.addEventListener('click', function() {
     settingsOverlay.style.display = 'none';
   });
+
+  function calculateCacheSize() {
+    document.getElementById('tasksSize').textContent = "Tasks Size: ";
+    document.getElementById('coursesSize').textContent = "Courses Size: ";
+    document.getElementById('totalSize').textContent = "Total Size: ";
+    document.getElementById('availableSize').textContent = "Available Size: ";
+
+    var storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    var tasksSize = JSON.stringify(storedTasks).length;
+    document.getElementById('tasksSize').textContent += tasksSize + " bytes";
+
+    var storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
+    var coursesSize = JSON.stringify(storedCourses).length;
+    document.getElementById('coursesSize').textContent += coursesSize + " bytes";
+
+    var totalSize = tasksSize + coursesSize;
+    document.getElementById('totalSize').textContent += totalSize + " bytes";
+
+    var availableSize = 5 * 1024 * 1024 - totalSize; 
+    document.getElementById('availableSize').textContent += availableSize + " bytes";
+}
 });

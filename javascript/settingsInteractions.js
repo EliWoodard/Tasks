@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const backgroundPage = document.getElementById('backgroundPage');
     const colorSchemePage = document.getElementById('colorSchemePage');
 
+
     profileButton.addEventListener("click", function() {
         // Hide all pages
         profilePage.style.display = 'none';
