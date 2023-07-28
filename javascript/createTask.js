@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   var discardButton = document.querySelector("#discard-button");
   var tasksSection = document.querySelector(".AddTaskWindow");
-  var taskContainer = document.querySelector(".Tasks");
   var taskTitleInput = document.querySelector(".task-title");
   var taskDescriptionTextarea = document.querySelector("#task-Description");
   var dueDateInput = document.querySelector("#date");
@@ -19,6 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function createTask(task) {
+    var [year, month, day] = task.date.split('-').map(Number);
+    month -= 1;  
+    var taskSection = getTaskSection(new Date(year, month, day));
+    var taskContainer = document.querySelector('#' + taskSection + ' .task-container'); 
+    
     var taskBox = document.createElement("div");
     taskBox.classList.add("task-box");
 
@@ -173,6 +177,43 @@ document.addEventListener("DOMContentLoaded", function () {
     subjectSelect.value = "";
   }
 
+  function getTaskSection(date) {
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    var tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    var startOfWeek = new Date(today);
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1));
+    
+    var endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    
+    var startOfNextWeek = new Date(endOfWeek);
+    startOfNextWeek.setDate(startOfNextWeek.getDate() + 1);
+    
+    var endOfNextWeek = new Date(startOfNextWeek);
+    endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);
+    
+    var startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    var endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
+    if (date.getTime() === today.getTime()) {
+      return 'due-today';
+    } else if (date.getTime() === tomorrow.getTime()) {
+      return 'due-tomorrow';
+    } else if (date > tomorrow && date <= endOfWeek) {
+      return 'due-this-week';
+    } else if (date > endOfWeek && date <= endOfNextWeek) {
+      return 'due-next-week';
+    } else if (date > endOfNextWeek && date <= endOfMonth) {
+      return 'due-this-month';
+    } else {
+      return 'due-after';
+    }
+  }  
+
   /**
    * @description save button used in the creation of new tasks or the AddTaskWindow.
    */
@@ -226,8 +267,9 @@ document.addEventListener("DOMContentLoaded", function () {
     var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
 
     var [year, month, day] = dateString.split('-').map(Number);
-    month -= 1;
+    month -= 1;  // Adjust the month number
     var date = new Date(year, month, day);
+    
 
     var updatedTask = {
       id: tasksOverlay.task.id,
@@ -240,9 +282,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (index > -1) {
       tasks.splice(index, 1, updatedTask);
+      tasksOverlay.taskBox.remove();  // Remove the old task from the DOM
+      createTask(updatedTask);  // Recreate the task so it gets placed in the correct section
     } else {
       tasks.push(updatedTask);
     }
+  
 
     var taskBox = tasksOverlay.taskBox;
     taskBox.querySelector('.task-title-box').textContent = title;

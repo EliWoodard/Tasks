@@ -307,11 +307,30 @@ body {
 
 .Tasks {
   display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  height: 68vh;
+  max-height: 68vh;
   overflow-y: scroll;
-  background-color: #e7e7e7;
+  flex-direction: column;
+}
+
+.task-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  align-items: flex-start; /* Added this line */
+  width: 100%; /* Added this line */
+}
+
+.task-section h2 {
+  margin: 0 0 10px 3%;
+}
+
+.task-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%; /* Added this line */
+  align-items: flex-start; /* Added this line */
+  margin-bottom: 4%;
 }
 
 .task-title-box {
@@ -325,11 +344,10 @@ body {
   flex-direction: row;
   justify-content: flex-start;
   width: 30%;
-  height: 10%;
+  min-height: 50px; /* Modify this according to your needs */
   box-shadow: 0 2px 4px rgba(46, 139, 87, 0.4);
   margin: 2% 0 2% 2%;
   transition: all 0.3s ease;
-  flex-wrap: wrap;
 }
 
 .task-box.due-today {
@@ -342,7 +360,6 @@ body {
 
 .task-color {
   width: 5%;
-  height: 100%;
   margin-right: 2%;
 }
 
