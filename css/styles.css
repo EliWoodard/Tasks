@@ -316,20 +316,30 @@ body {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
-  align-items: flex-start; /* Added this line */
-  width: 100%; /* Added this line */
+  align-items: flex-start;
+  width: 100%;
 }
 
 .task-section h2 {
   margin: 0 0 10px 3%;
+  color: #343434;
+  width: 97%;
+}
+
+.dueUnderline {
+  width: 97%;
+  color: #787878;
+  border: 1px solid #787878;
+  position: relative;
+  margin: 1% 0 0;
 }
 
 .task-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 100%; /* Added this line */
-  align-items: flex-start; /* Added this line */
+  width: 100%;
+  align-items: flex-start;
   margin-bottom: 4%;
 }
 
@@ -344,7 +354,7 @@ body {
   flex-direction: row;
   justify-content: flex-start;
   width: 30%;
-  min-height: 50px; /* Modify this according to your needs */
+  min-height: 50px;
   box-shadow: 0 2px 4px rgba(46, 139, 87, 0.4);
   margin: 2% 0 2% 2%;
   transition: all 0.3s ease;
