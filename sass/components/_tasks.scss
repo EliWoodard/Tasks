@@ -2,8 +2,9 @@
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  max-height: 100%;
-  overflow-y: auto;
+  height: 68vh;
+  overflow-y: scroll;
+  background-color: #e7e7e7;
 }
 
 .task-title-box {
