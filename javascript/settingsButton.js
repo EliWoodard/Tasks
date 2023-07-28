@@ -82,6 +82,11 @@ document.addEventListener("DOMContentLoaded", function() {
     settingsOverlay.style.display = 'none';
   });
 
+  document.getElementById('clearCache').addEventListener('click', function() {
+    localStorage.clear();
+    location.reload();
+  });
+
   function calculateCacheSize() {
     document.getElementById('tasksSize').textContent = "Tasks Size: ";
     document.getElementById('coursesSize').textContent = "Courses Size: ";

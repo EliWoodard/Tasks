@@ -26,11 +26,11 @@
 
 #leftSettingsColumn {
     width: 25%;
-    border: inset;
 }
 
 #rightSettingsColumn {
     width: 75%;
+    border-left: inset;
 }
 
 .settingsOption {
@@ -82,14 +82,43 @@
 #profilePage {
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 #settingsHeader {
-    font-size: 100%;
+    font-size: 150%;
     width: 99%;
     right: -1%;
     position: relative;
 }
+
+#profileContent {
+    width: 99%;
+    margin-left: 1%;
+    height: 80%;
+    font-size: 120%;
+}
+
+#clearCacheContainer {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+#clearCache {
+    height: 45%;
+    margin-bottom: 2%;
+    border-radius: 0;
+    background-color: #2E8B57;
+    color: #fff;
+    margin-right: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
 
 #filterPage {
     display: none;
