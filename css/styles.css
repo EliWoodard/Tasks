@@ -905,7 +905,7 @@ body {
   position: absolute;
   width: 300px;
   height: 140px;
-  background-color: #343434;
+  background-color: #e7e7e7;
   z-index: 1;
   box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);
   flex-direction: column;
@@ -915,7 +915,7 @@ body {
   height: 15%;
   margin-left: 2%;
   font-size: 100%;
-  color: #2E8B57;
+  color: #343434;
 }
 
 #suggestionDescription {
@@ -923,8 +923,8 @@ body {
   width: 96%;
   resize: none;
   margin: 0 2% 2% 2%;
-  background: #343434;
-  color: #fff;
+  background: #e7e7e7;
+  color: #343434;
   outline: none;
 }
 
@@ -939,8 +939,8 @@ body {
   height: 100%;
   margin-right: 5%;
   width: 36%;
-  background: #2E8B57;
-  color: #fff;
+  background: #fff;
+  color: #343434;
 }
 
 #submitSuggestion {
