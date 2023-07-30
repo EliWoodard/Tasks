@@ -168,6 +168,10 @@
   flex-direction: column;
 }
 
+#overdue {
+  display: none;
+}
+
 #taskTitle {
   width: 90%;
   height: 10%;

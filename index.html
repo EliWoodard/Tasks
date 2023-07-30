@@ -42,6 +42,12 @@
         <p class="TitleText">Tasks</p>
       </div>
       <div class="Tasks">
+        <div class="task-section" id="overdue">
+          <h2>Overdue
+            <hr class="dueUnderline">
+          </h2>
+          <div class="task-container"></div>
+        </div>
         <div class="task-section" id="due-today">
           <h2>Due Today
             <hr class="dueUnderline">
@@ -166,7 +172,7 @@
         <h1 id="settingsHeader">
           Profile
         </h1>
-        <div id="profileContent">
+        <div class="settiongsContent">
           <p id="tasksSize">Tasks Size: </p>
           <p id="coursesSize">Courses Size: </p>
           <p id="totalSize">Total Bytes: </p>
@@ -180,6 +186,42 @@
         <h1 id="settingsHeader">
           Filters
         </h1>
+        <div class="settiongsContent">
+          <div class="filterSections">
+            <label>
+              <input type="checkbox" id="checkbox1" name="checkbox1">
+              Due-Tomorrow
+            </label>
+          </div>
+        <br>
+        <div class="filterSections">
+          <label>
+            <input type="checkbox" id="checkbox2" name="checkbox2">
+            Due-This-Week
+          </label>
+        </div>
+        <br>
+        <div class="filterSections">
+          <label>
+            <input type="checkbox" id="checkbox3" name="checkbox3">
+            Due-Next-Week
+          </label>
+        </div>
+        <br>
+        <div class="filterSections">
+          <label>
+            <input type="checkbox" id="checkbox4" name="checkbox4">
+            Due-This-Month
+          </label>
+        </div>
+        <br>
+        <div class="filterSections">
+          <label>
+            <input type="checkbox" id="checkbox5" name="checkbox5">
+            Due-After
+          </label>
+        </div>
+        </div>
       </div>
       <div id="backgroundPage">
         <h1 id="settingsHeader">

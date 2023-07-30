@@ -86,6 +86,16 @@
     height: 100%;
 }
 
+#filterPage {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.filterSections {
+    width: 100%;
+}
+
 #settingsHeader {
     font-size: 150%;
     width: 99%;
@@ -93,7 +103,7 @@
     position: relative;
 }
 
-#profileContent {
+.settiongsContent {
     width: 99%;
     margin-left: 1%;
     height: 80%;
