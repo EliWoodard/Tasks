@@ -147,20 +147,90 @@
     height: 80%;
     font-size: 120%;
     display: flex;
-    justify-content: space-around;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    align-content: space-between;
 }
 
 .backgroundOption {
     width: 100px;
     height: 70px;
+    margin: 1%;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-  }
+}
   
-  .backgroundOption.selected {
+.backgroundOption.selected {
     border: 5px solid black;
+}
+
+#color-gradient-background {
+    width: 100%;
+    display: flex;
+    border: none;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.switch-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin-right: 2%;
   }
+
+  .switch {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .switch-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e7e7e7;
+    transition: .4s;
+    border: 2px solid #343434;
+    box-shadow: 0 0 1px #343434;
+  }
+
+  .switch-label:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 2px;
+    background-color: #343434;
+    transition: 0.4s;
+  }
+
+  .switch:checked + .switch-label {
+    background-color: #2E8B57;
+  }
+
+  .switch:focus + .switch-label {
+    box-shadow: 0 0 1px #2E8B57;
+  }
+
+  .switch:checked + .switch-label:before {
+    transform: translateX(24px);
+  }
+
+
+#color1, #color2 {
+    margin-right: 2%;
+    width: 6%;
+    height: 35%;
+    border: 2px solid #343434;  /* Adding a border */
+    border-radius: 3px; /* Rounded corners */
+}
   
 
 #colorSchemePage {
