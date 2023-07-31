@@ -137,7 +137,31 @@
 
 #backgroundPage {
     display: none;
+    flex-direction: column;
+    height: 100%;
 }
+
+#backgroundContent {
+    width: 99%;
+    margin-left: 1%;
+    height: 80%;
+    font-size: 120%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.backgroundOption {
+    width: 100px;
+    height: 70px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+  .backgroundOption.selected {
+    border: 5px solid black;
+  }
+  
 
 #colorSchemePage {
     display: none;

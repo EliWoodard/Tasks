@@ -1,24 +1,54 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const droplets = 50;
-  const rain = document.querySelector('.rain');
+document.addEventListener('DOMContentLoaded', (event) => {
+  const cover1 = document.getElementById('backgroundCover1');
+  const cover2 = document.getElementById('backgroundCover2');
 
-  for (let r = 0; r < droplets; r++) {
-    const drop = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    drop.classList.add('rain__drop');
-    drop.setAttribute('preserveAspectRatio', 'xMinYMin');
-    drop.setAttribute('viewBox', '0 0 5 50');
-    drop.style.setProperty('--x', Math.floor(Math.random() * 100));
-    drop.style.setProperty('--y', Math.floor(Math.random() * 100));
-    drop.style.setProperty('--o', Math.random());
-    drop.style.setProperty('--a', Math.random() + 0.5);
-    drop.style.setProperty('--d', (Math.random() * 2) - 1);
-    drop.style.setProperty('--s', Math.random());
+  let activeCover = cover1;
+  let inactiveCover = cover2;
 
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('stroke', 'none');
-    path.setAttribute('d', 'M 2.5,0 C 2.6949458,3.5392017 3.344765,20.524571 4.4494577,30.9559 5.7551357,42.666753 4.5915685,50 2.5,50 0.40843152,50 -0.75513565,42.666753 0.55054234,30.9559 1.655235,20.524571 2.3050542,3.5392017 2.5,0 Z');
-
-    drop.appendChild(path);
-    rain.appendChild(drop);
+  const savedBackgroundId = localStorage.getItem('backgroundOptionId');
+  if (savedBackgroundId) {
+    const selectedOption = document.getElementById(savedBackgroundId);
+    if (selectedOption) {
+      selectedOption.classList.add('selected');
+    }
   }
+
+  window.onload = function() {
+    if (savedBackgroundId) {
+      const selectedOption = document.getElementById(savedBackgroundId);
+      if (selectedOption) {
+        // Transition to the saved background
+        inactiveCover.style.backgroundImage = selectedOption.style.backgroundImage;
+        inactiveCover.style.opacity = '1';
+        activeCover.style.opacity = '0';
+        
+        // Swap active and inactive covers
+        const temp = activeCover;
+        activeCover = inactiveCover;
+        inactiveCover = temp;
+      }
+    }
+  }
+
+  document.querySelectorAll('.backgroundOption').forEach((element) => {
+    element.addEventListener('click', (e) => {
+      document.querySelectorAll('.backgroundOption').forEach((el) => {
+        el.classList.remove('selected');
+      });
+
+      e.currentTarget.classList.add('selected');
+      const newBackground = e.currentTarget.style.backgroundImage;
+
+      inactiveCover.style.backgroundImage = newBackground;
+      inactiveCover.style.opacity = '1';
+
+      activeCover.style.opacity = '0';
+
+      const temp = activeCover;
+      activeCover = inactiveCover;
+      inactiveCover = temp;
+
+      localStorage.setItem('backgroundOptionId', e.currentTarget.id);
+    });
+  });
 });

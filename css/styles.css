@@ -14,38 +14,17 @@ body {
   overflow: hidden;
 }
 
-.rain__drop {
-  animation-delay: calc(var(--d) * 1s);
-  animation-duration: calc(var(--a) * 3s); /* Adjust the duration value as desired */
-  animation-iteration-count: infinite;
-  animation-name: drop;
-  animation-timing-function: linear;
-  height: 30px;
-  left: calc(var(--x) * 1%);
-  position: absolute;
-  top: calc((var(--y) + 50) * -1px);
+.backgroundCover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: opacity 2s;
 }
 
-.rain__drop path {
-  fill: #a1c6cc;
-  opacity: var(--o);
-  transform: translateY(0);
-  transform-origin: center bottom;
-}
-
-@keyframes drop {
-  0% {
-    opacity: 0;
-    transform: translateY(-100vh) scaleY(0);
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(100vh) scaleY(1.5);
-  }
-}
 #shrink-button {
   position: absolute;
   top: 50%;
@@ -910,6 +889,29 @@ body {
 
 #backgroundPage {
   display: none;
+  flex-direction: column;
+  height: 100%;
+}
+
+#backgroundContent {
+  width: 99%;
+  margin-left: 1%;
+  height: 80%;
+  font-size: 120%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.backgroundOption {
+  width: 100px;
+  height: 70px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.backgroundOption.selected {
+  border: 5px solid black;
 }
 
 #colorSchemePage {
