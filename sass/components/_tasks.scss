@@ -5,12 +5,31 @@
   flex-direction: column;
 }
 
+.Tasks::-webkit-scrollbar {
+  width: 10px;
+}
+
+.Tasks::-webkit-scrollbar-track {
+  background: #e7e7e7;
+}
+
+.Tasks::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+.Tasks::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+
+
 .task-section {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
   align-items: flex-start;  
-  width: 100%;  
+  width: 100%; 
+  margin-top: 2%;
 }
 
 .task-section h2 {

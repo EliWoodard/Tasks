@@ -59,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function() {
        subjectSelect.removeChild(optionToRemove);
      }
 
-     // Remove course from local storage
      var courses = JSON.parse(localStorage.getItem('courses')) || [];
      var index = courses.findIndex(c => c.name === course.name && c.color === course.color);
      if (index > -1) {
@@ -69,80 +68,86 @@ document.addEventListener("DOMContentLoaded", function() {
    });
  }
 
+ overlay.addEventListener('click', function(event) {
+    if (event.target === overlay) {
+        discardCourseButton.click();
+    }
+  });
+
   addCourseButton.addEventListener("click", function() {
    console.log("Add course button clicked!");
    overlay.style.display = "flex";
    courseWindow.style.display = "flex";
- });
+  });
 
- discardCourseButton.addEventListener("click", function() {
-   overlay.style.display = "none";
-   courseWindow.style.display = "none";
-   courseNameInput.value = "";
-   courseColorInput.value = "none";
- });
+  discardCourseButton.addEventListener("click", function() {
+    overlay.style.display = "none";
+    courseWindow.style.display = "none";
+    courseNameInput.value = "";
+    courseColorInput.value = "none";
+  });
 
 
-    saveCourseButton.addEventListener("click", function() {
-      console.log("Save course button clicked!");
+  saveCourseButton.addEventListener("click", function() {
+    console.log("Save course button clicked!");
 
-      var newCourse = {
-        name: courseNameInput.value,
-        color: courseColorInput.value
-      };
+    var newCourse = {
+      name: courseNameInput.value,
+      color: courseColorInput.value
+    };
 
-     var courses = JSON.parse(localStorage.getItem('courses')) || [];
-     courses.push(newCourse);
-     localStorage.setItem('courses', JSON.stringify(courses));
+    var courses = JSON.parse(localStorage.getItem('courses')) || [];
+    courses.push(newCourse);
+    localStorage.setItem('courses', JSON.stringify(courses));
 
-      var courseBox = document.createElement("div");
-      courseBox.classList.add("course-box");
+    var courseBox = document.createElement("div");
+    courseBox.classList.add("course-box");
 
-      var colorBox = document.createElement("div");
-      colorBox.style.backgroundColor = courseColorInput.value;
-      colorBox.classList.add("course-color-box");
+    var colorBox = document.createElement("div");
+    colorBox.style.backgroundColor = courseColorInput.value;
+    colorBox.classList.add("course-color-box");
 
-      var textBox = document.createElement("div");
-      textBox.textContent = courseNameInput.value;
-      textBox.classList.add("course-text-box");
+    var textBox = document.createElement("div");
+    textBox.textContent = courseNameInput.value;
+    textBox.classList.add("course-text-box");
 
-      var deleteWindow = document.createElement("div");
-      deleteWindow.classList.add("CourseDeleteWindow");
+    var deleteWindow = document.createElement("div");
+    deleteWindow.classList.add("CourseDeleteWindow");
 
-      var deleteButton = document.createElement("button");
-      deleteButton.id = "delete-course-button";
-      deleteButton.textContent = "Remove";
+    var deleteButton = document.createElement("button");
+    deleteButton.id = "delete-course-button";
+    deleteButton.textContent = "Remove";
 
-      courseBox.appendChild(colorBox);
-      courseBox.appendChild(textBox);
-      courseBox.appendChild(deleteWindow);
-      deleteWindow.appendChild(deleteButton);
-      coursesContainer.appendChild(courseBox);
+    courseBox.appendChild(colorBox);
+    courseBox.appendChild(textBox);
+    courseBox.appendChild(deleteWindow);
+    deleteWindow.appendChild(deleteButton);
+    coursesContainer.appendChild(courseBox);
 
-      var subjectSelect = document.querySelector("#subject-select");
-      var newOption = document.createElement("option");
-      newOption.text = courseNameInput.value;
-      newOption.value = courseNameInput.value;
-      subjectSelect.add(newOption);
+    var subjectSelect = document.querySelector("#subject-select");
+    var newOption = document.createElement("option");
+    newOption.text = courseNameInput.value;
+    newOption.value = courseNameInput.value;
+    subjectSelect.add(newOption);
 
-      var courseNameValue = courseNameInput.value;
+    var courseNameValue = courseNameInput.value;
 
-      discardCourseButton.click();
+    discardCourseButton.click();
 
-      courseBox.addEventListener("click", function() {
-        this.classList.toggle("clicked");
+    courseBox.addEventListener("click", function() {
+      this.classList.toggle("clicked");
+    });
+
+    deleteButton.addEventListener("click", function(event) {
+      event.stopPropagation();
+      courseBox.remove();
+      var options = Array.from(subjectSelect.options);
+      var optionToRemove = options.find(function(option) {
+        return option.value === courseNameValue;
       });
-
-      deleteButton.addEventListener("click", function(event) {
-        event.stopPropagation();
-         courseBox.remove();
-         var options = Array.from(subjectSelect.options);
-         var optionToRemove = options.find(function(option) {
-           return option.value === courseNameValue;
-         });
-         if (optionToRemove) {
-           subjectSelect.removeChild(optionToRemove);
-         }
-      });
+      if (optionToRemove) {
+        subjectSelect.removeChild(optionToRemove);
+      }
     });
   });
+});

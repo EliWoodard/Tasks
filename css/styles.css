@@ -132,8 +132,8 @@ body {
 
 .create-task-button {
   width: 100%;
-  height: 100%;
-  background-color: #00cc00;
+  height: 91%;
+  background-color: #4CAF50;
   color: #ffffff;
   border: none;
   font-size: 16px;
@@ -155,7 +155,7 @@ body {
 
 .add-course-button {
   width: 100%;
-  height: 100%;
+  height: 91%;
   background-color: #cf7c00;
   color: #ffffff;
   border: none;
@@ -291,12 +291,29 @@ body {
   flex-direction: column;
 }
 
+.Tasks::-webkit-scrollbar {
+  width: 10px;
+}
+
+.Tasks::-webkit-scrollbar-track {
+  background: #e7e7e7;
+}
+
+.Tasks::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+.Tasks::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
 .task-section {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
   align-items: flex-start;
   width: 100%;
+  margin-top: 2%;
 }
 
 .task-section h2 {
@@ -1143,13 +1160,6 @@ body {
 
 .Course-Adder {
   display: none;
-}
-
-@media screen and (max-width: 1500px) {
-  .task-window {
-    width: 100%;
-    height: 100%;
-  }
 }
 
 /*# sourceMappingURL=styles.css.map */
