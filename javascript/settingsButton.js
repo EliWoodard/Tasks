@@ -84,16 +84,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
     var tasksSize = JSON.stringify(storedTasks).length;
-    document.getElementById('tasksSize').textContent += tasksSize + " bytes";
+    document.getElementById('tasksSize').textContent += tasksSize - 2 + " bytes";
 
     var storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
     var coursesSize = JSON.stringify(storedCourses).length;
-    document.getElementById('coursesSize').textContent += coursesSize + " bytes";
+    document.getElementById('coursesSize').textContent += coursesSize - 2 + " bytes";
 
-    var totalSize = tasksSize + coursesSize;
+    var totalSize = tasksSize + coursesSize - 4;
     document.getElementById('totalSize').textContent += totalSize + " bytes";
 
-    var availableSize = 5 * 1024 * 1024 - totalSize; 
+    var availableSize = 5 * 1024 * 1024 - totalSize - 4; 
     document.getElementById('availableSize').textContent += availableSize + " bytes";
 }
 });
