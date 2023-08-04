@@ -195,20 +195,23 @@
     right: 0;
     bottom: 0;
     background-color: #e7e7e7;
-    transition: .4s;
+    display: flex;
+    transition: 0.4s;
     border: 2px solid #343434;
     box-shadow: 0 0 1px #343434;
+    align-items: center;
   }
 
   .switch-label:before {
-    position: absolute;
+    position: relative;
     content: "";
     height: 16px;
     width: 16px;
     left: 4px;
-    bottom: 2px;
     background-color: #343434;
     transition: 0.4s;
+    display: flex;
+    align-items: center;
   }
 
   .switch:checked + .switch-label {
