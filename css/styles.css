@@ -75,26 +75,20 @@ body {
   overflow: hidden;
 }
 
-.home-button.active {
-  background-color: #2E8B57;
-}
-
 .home-button:hover,
 .courses-button:hover {
   background-color: #388E3C;
+  width: 75%;
+}
+
+.home-button.active {
+  background-color: #2E8B57;
+  width: 80%;
 }
 
 .home-button:active,
 .courses-button:active {
   transform: translateY(1px);
-}
-
-.home-button.active,
-.home-button:hover,
-.courses-button.active,
-.courses-button:hover {
-  background-color: #2E8B57;
-  width: 80%;
 }
 
 .Task-Container,
