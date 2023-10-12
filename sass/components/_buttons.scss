@@ -73,17 +73,16 @@
   height: 100%;
 }
 
+.add-course-button,
 .create-task-button {
   width: 100%;
   height: 100%;
   position: relative;
-  margin-top: -5.8px; // Rendering Issue
   background-color: #4CAF50;
   color: #ffffff;
   border: none;
   font-size: 16px;
   font-weight: bold;
-  box-shadow: 0 3px gray;
   cursor: pointer;
   transition: background-color 0.3s
 }
@@ -116,36 +115,29 @@
 .create-task-button:active {
   box-shadow: none;
   position: relative;
-  top: .2em;
+  background-color: #006900;
 }
 
 .add-course-button {
-  width: 100%;
-  height: 91%;
   background-color: #cf7c00;
-  color: #ffffff;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
+}
+
+.hover-panel {
+  width: 100%;
+  height: 100%;
   position: relative;
-  z-index: 1;
-  overflow: hidden;
-  transition: background-color 0.3s ease;
-  padding-left: 10px;
-  font-weight: bold;
-  text-align: center;
-  display: inline-block;
-  box-shadow: 0 .2em gray;
+  perspective: 800px;
+  cursor: pointer;
 }
 
 .hover-panel:hover .add-course-button {
-  background-color: #cf7c00;
+  background-color: #bb7000;
 }
 
 .add-course-button:active {
   box-shadow: none;
   position: relative;
-  top: .2em;
+  background-color: #945900;
 }
 
 .settings-button {
