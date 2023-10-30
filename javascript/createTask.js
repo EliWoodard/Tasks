@@ -158,11 +158,13 @@ document.addEventListener("DOMContentLoaded", function () {
     taskBox.appendChild(dateBox);
     taskBox.appendChild(descriptionBox);
 
-    taskBox.addEventListener("click", function () {
-      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-      var currentTask = tasks.find(t => t.id === task.id);
-      showTasksOverlay(currentTask, taskBox);
-    });
+    taskBox.addEventListener("click", (function(taskToCapture) {
+      return function() {
+        var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        var currentTask = tasks.find(t => t.id === taskToCapture.id);
+        showTasksOverlay(currentTask, taskBox);
+      };
+    })(task));    
 
     if (date < today) {
       // Task is overdue, add it to the overdue section and show the overdue section
@@ -323,8 +325,6 @@ document.addEventListener("DOMContentLoaded", function () {
       createTask(task);
     });
   }
-
-
 
   /**
    * @description save button used in the creation of new tasks or the AddTaskWindow.
