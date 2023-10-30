@@ -7,10 +7,10 @@
 2. To create tasks, click on the "Create Task" button located within the "Tasks" section. It is then as simple as filling in the desired attributes of each task.
 3. Also, users have the option to access settings to customize the display of tasks and the webpage's background.
 4. The "Profile" tab provides insights into current data usage. Users can also clear the cache to liberate storage. It should be captioned as this will reset the website to its default state.
+5. It isn't initially noticeable however when a task becomes overdue it will create its own section to be placed into.
 
 ## Languages
 - HTML
 - CSS
 - SASS
 - JavaScript
-
