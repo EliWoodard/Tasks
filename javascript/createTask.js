@@ -158,13 +158,13 @@ document.addEventListener("DOMContentLoaded", function () {
     taskBox.appendChild(dateBox);
     taskBox.appendChild(descriptionBox);
 
-    taskBox.addEventListener("click", (function(taskToCapture) {
-      return function() {
-        var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        var currentTask = tasks.find(t => t.id === taskToCapture.id);
-        showTasksOverlay(currentTask, taskBox);
-      };
-    })(task));    
+    taskBox.addEventListener("click", function() {
+      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      var currentTaskIndex = tasks.findIndex(t => t.id === task.id);
+      if (currentTaskIndex !== -1) {
+        showTasksOverlay(tasks[currentTaskIndex], taskBox);
+      }
+    });
 
     if (date < today) {
       // Task is overdue, add it to the overdue section and show the overdue section
@@ -340,7 +340,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
     var newTask = {
-      id: (tasks.length || 0) + 1,
+      id: Date.now(),  // Use the current timestamp as a unique ID
       title: taskTitleInput.value,
       description: taskDescriptionTextarea.value,
       date: dueDateInput.value,
@@ -384,7 +384,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     var updatedTask = {
-      id: tasksOverlay.task.id,
+      id: tasksOverlay.task.id,  // Preserve the original ID
       title: title,
       description: description,
       date: dateString,
@@ -393,7 +393,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     if (index > -1) {
-      tasks.splice(index, 1, updatedTask);
+      tasks[index] = updatedTask;  // Update the task in the array
       tasksOverlay.taskBox.remove();  // Remove the old task from the DOM
       createTask(updatedTask);  // Recreate the task so it gets placed in the correct section
     } else {
