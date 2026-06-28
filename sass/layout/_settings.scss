@@ -1,246 +1,272 @@
 #settingsBox {
-    height: 8%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    bottom: 0;
-    position: absolute;
-    overflow: hidden;
+  position: absolute;
+  right: 0.75rem;
+  bottom: 1rem;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
-#settingsGearBox {
-    width: 30%;
-    height: 100%;
+#settingsGearBox,
+#suggestionContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #settingsOverlay {
-    display: none;
-    position: absolute;
-    width: 600px;
-    height: 340px;
-    background-color: #c3c3c3;
-    z-index: 1;
-    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);
-    flex-direction: row;
+  position: fixed;
+  top: 12vh;
+  left: calc(50% - 300px);
+  z-index: 13;
+  width: min(620px, calc(100vw - 32px));
+  min-height: 360px;
+  overflow: hidden;
+  border: 1px solid rgba(#fff, 0.45);
+  border-radius: $radius;
+  background-color: $color-surface;
+  box-shadow: $shadow-soft;
+  flex-direction: row;
 }
 
 #leftSettingsColumn {
-    width: 25%;
-    background-color: #343434;
+  width: 168px;
+  padding: 1rem 0;
+  background-color: $color-sidebar;
 }
 
 #rightSettingsColumn {
-    width: 75%;
-    background: #e7e7e7;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  background: $color-panel;
 }
 
 .settingsOption {
-    width: 70%;
-    height: 10%;
-    margin: 4% 0 4% 0;
-    border-radius: 0;
-    border: none;
-    color: black;
-    transition-duration: 0.4s;
+  width: calc(100% - 1rem);
+  min-height: 42px;
+  margin: 0.25rem 0;
+  border: 0;
+  border-radius: 0 $radius-small $radius-small 0;
+  background: transparent;
+  color: #f8faf7;
+  font-weight: 800;
+  text-align: left;
+  padding: 0 1rem;
+  transition: width 0.2s ease, background-color 0.2s ease;
 }
 
-.settingsOption:hover {
-    background-color: #2E8B57; 
-    color: white;
-  }
-
+.settingsOption:hover,
 .settingsOption.active {
-    width: 85%;
-    background-color: #2E8B57; 
-    color: white;
+  width: calc(100% - 0.5rem);
+  background-color: $color-primary;
 }
 
 #closeButtonSection {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    position: absolute;
-    z-index: 1;
-    right: 1%;
-    top: 1%;
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  z-index: 1;
 }
 
 #closeButton {
-    font-size: 30px;
-    margin: 2% 4% 0 0;
-    cursor: pointer;
-    color: #787878;
-    width: auto;
-    display: flex;
-    height: 37px;
-    align-items: center;
-    transition: color 0.3s ease;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba($color-sidebar, 0.08);
+  color: $color-muted;
+  font-size: 1.35rem;
+  line-height: 1;
 }
 
 #closeButton:hover {
-    color: rgb(167, 0, 0);
+  background: rgba($color-danger, 0.1);
+  color: $color-danger;
 }
 
-#profilePage {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+.settings-page {
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem 1.4rem 1.4rem;
 }
 
-#filterPage {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+.settingsHeader {
+  margin: 0 3rem 1rem 0;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.settingsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  color: $color-muted;
+}
+
+.filter-list {
+  gap: 0.65rem;
 }
 
 .filterSections {
-    width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 38px;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-small;
+  background: rgba($color-surface, 0.62);
+  color: $color-ink;
+  font-weight: 700;
 }
 
-#settingsHeader {
-    font-size: 150%;
-    width: 99%;
-    right: -1%;
-    position: relative;
-}
-
-.settiongsContent {
-    width: 99%;
-    margin-left: 1%;
-    height: 80%;
-    font-size: 120%;
+.filterSections input {
+  width: 18px;
+  height: 18px;
+  accent-color: $color-primary;
 }
 
 #clearCacheContainer {
-    width: 100%;
-    height: 20%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
 }
 
 #clearCache {
-    height: 45%;
-    margin-bottom: 2%;
-    border-radius: 0;
-    background-color: #2E8B57;
-    color: #fff;
-    margin-right: 2%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+  min-height: 40px;
+  border: 1px solid rgba($color-danger, 0.24);
+  border-radius: $radius-small;
+  background-color: rgba($color-danger, 0.08);
+  color: $color-danger;
+  font-weight: 800;
+  padding: 0.5rem 0.8rem;
 }
 
-#filterPage {
-    display: none;
-}
-
-#backgroundPage {
-    display: none;
-    flex-direction: column;
-    height: 100%;
+#clearCache:hover {
+  background-color: rgba($color-danger, 0.14);
 }
 
 #backgroundContent {
-    width: 99%;
-    margin-left: 1%;
-    height: 80%;
-    font-size: 120%;
-    display: flex;
-    align-content: flex-start;
-    flex-wrap: wrap;
-    align-content: space-between;
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .backgroundOption {
-    width: 100px;
-    height: 70px;
-    margin: 1%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    transition: all 0.3s ease-in-out;
+  width: 106px;
+  height: 72px;
+  border: 2px solid transparent;
+  border-radius: $radius-small;
+  background-color: $color-surface;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: $shadow-card;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 .backgroundOption:hover {
-    transform: translateY(-5px);
+  transform: translateY(-2px);
 }
-  
+
 .backgroundOption.selected {
-    box-shadow: 5px 5px 5px black;
+  border-color: $color-primary;
 }
 
 #color-gradient-background {
-    width: 100%;
-    height: 70px;
-    display: flex;
-    border: none;
-    justify-content: flex-end;
-    align-items: flex-end;
+  width: 100%;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
 }
 
 .switch-wrapper {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-    margin-right: 2%;
-  }
-
-  .switch {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  .switch-label {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #e7e7e7;
-    display: flex;
-    transition: 0.4s;
-    border: 2px solid #343434;
-    box-shadow: 0 0 1px #343434;
-    align-items: center;
-  }
-
-  .switch-label:before {
-    position: relative;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 4px;
-    background-color: #343434;
-    transition: 0.4s;
-    display: flex;
-    align-items: center;
-  }
-
-  .switch:checked + .switch-label {
-    background-color: #2E8B57;
-  }
-
-  .switch:focus + .switch-label {
-    box-shadow: 0 0 1px #2E8B57;
-  }
-
-  .switch:checked + .switch-label:before {
-    transform: translateX(24px);
-  }
-
-
-#color1, #color2 {
-    margin-right: 2%;
-    width: 6%;
-    height: 35%;
-    border: 2px solid #343434;  /* Adding a border */
-    border-radius: 3px; /* Rounded corners */
+  position: relative;
+  display: inline-block;
+  width: 54px;
+  height: 28px;
 }
-  
 
-#colorSchemePage {
-    display: none;
+.switch {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.switch-label {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  overflow: hidden;
+  border: 2px solid $color-sidebar;
+  border-radius: 999px;
+  background-color: $color-surface;
+  color: transparent;
+  font-size: 0;
+  transition: background-color 0.2s ease;
+}
+
+.switch-label:before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: $color-sidebar;
+  transition: transform 0.2s ease;
+}
+
+.switch:checked + .switch-label {
+  background-color: $color-primary;
+}
+
+.switch:checked + .switch-label:before {
+  transform: translateX(25px);
+  background-color: #fff;
+}
+
+#color1,
+#color2 {
+  width: 46px;
+  height: 36px;
+  padding: 0.15rem;
+}
+
+@media (max-width: 720px) {
+  #settingsBox {
+    position: static;
+    margin-left: auto;
+  }
+
+  #settingsOverlay {
+    top: 1rem;
+    left: 1rem;
+    width: calc(100vw - 2rem);
+    flex-direction: column;
+  }
+
+  #leftSettingsColumn {
+    width: 100%;
+    display: flex;
+    padding: 0.75rem;
+  }
+
+  .settingsOption,
+  .settingsOption:hover,
+  .settingsOption.active {
+    width: auto;
+    flex: 1;
+    border-radius: $radius-small;
+    text-align: center;
+  }
 }

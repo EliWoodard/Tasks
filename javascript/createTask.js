@@ -1,483 +1,437 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var discardButton = document.querySelector("#discard-button");
-  var tasksSection = document.querySelector(".AddTaskWindow");
-  var taskTitleInput = document.querySelector(".task-title");
-  var taskDescriptionTextarea = document.querySelector("#task-Description");
-  var dueDateInput = document.querySelector("#date");
-  var subjectSelect = document.querySelector("#subject-select");
-  var overlay = document.querySelector(".overlay");
-  var saveButton = document.querySelector("#save-button");
-  var tasksOverlay = document.querySelector("#tasksOverlay");
-  var tasksOverlayLeft = document.querySelector("#tasksOverlayLeft");
-  var overdueSection = document.querySelector("#overdue");
-  var overdueTaskContainer = overdueSection.querySelector(".task-container");
+  const { colors, courses, dates, dom, events, storage } = window.TasksApp;
 
+  const elements = {
+    overlay: dom.query(".overlay"),
+    createWindow: dom.query(".AddTaskWindow"),
+    createTitle: dom.query("#task-title-input"),
+    createDescription: dom.query("#task-Description"),
+    createDate: dom.query("#date"),
+    createSubject: dom.query("#subject-select"),
+    createSave: dom.query("#save-button"),
+    createDiscard: dom.query("#discard-button"),
+    createMessage: dom.query("#taskFormMessage"),
+    editOverlay: dom.query("#tasksOverlay"),
+    editAccent: dom.query("#tasksOverlayLeft"),
+    editTitle: dom.query("#taskTitle"),
+    editDate: dom.query("#taskDate"),
+    editSubject: dom.query("#taskSubject"),
+    editDescription: dom.query("#taskDescription"),
+    editSave: dom.query("#saveButton"),
+    editDiscard: dom.query("#discardButton"),
+    editComplete: dom.query("#completeButton"),
+    editMessage: dom.query("#editTaskMessage")
+  };
 
-  // Get the checkbox elements
-  var checkbox0 = { checked: true }; // Always checked
-  var checkbox1 = document.querySelector("#checkbox1");
-  var checkbox2 = document.querySelector("#checkbox2");
-  var checkbox3 = document.querySelector("#checkbox3");
-  var checkbox4 = document.querySelector("#checkbox4");
-  var checkbox5 = document.querySelector("#checkbox5");
+  const requiredElements = Object.values(elements).filter(Boolean);
 
-  // Initialize the checkboxes' states from localStorage
-  checkbox1.checked = localStorage.getItem("checkbox1") === "true";
-  checkbox2.checked = localStorage.getItem("checkbox2") === "true";
-  checkbox3.checked = localStorage.getItem("checkbox3") === "true";
-  checkbox4.checked = localStorage.getItem("checkbox4") === "true";
-  checkbox5.checked = localStorage.getItem("checkbox5") === "true";
-
-  // Get the section elements
-  var section0 = document.querySelector("#due-today");
-  var section1 = document.querySelector("#due-tomorrow");
-  var section2 = document.querySelector("#due-this-week");
-  var section3 = document.querySelector("#due-next-week");
-  var section4 = document.querySelector("#due-this-month");
-  var section5 = document.querySelector("#due-after");
-
-  // Set the sections' display based on the corresponding checkboxes' states
-  section0.style.display = checkbox0.checked ? "block" : "none";
-  section1.style.display = checkbox1.checked ? "block" : "none";
-  section2.style.display = checkbox2.checked ? "block" : "none";
-  section3.style.display = checkbox3.checked ? "block" : "none";
-  section4.style.display = checkbox4.checked ? "block" : "none";
-  section5.style.display = checkbox5.checked ? "block" : "none";
-
-  // The sections array
-  var sections = [section0, section1, section2, section3, section4, section5];
-
-  // The checkboxes array
-  var checkboxes = [checkbox0, checkbox1, checkbox2, checkbox3, checkbox4, checkbox5];
-
-  checkbox1.addEventListener("change", function () {
-    localStorage.setItem("checkbox1", checkbox1.checked);
-    section1.style.display = checkbox1.checked ? "block" : "none";
-    reassignTasks();
-  });
-  checkbox2.addEventListener("change", function () {
-    localStorage.setItem("checkbox2", checkbox2.checked);
-    section2.style.display = checkbox2.checked ? "block" : "none";
-    reassignTasks();
-  });
-  checkbox3.addEventListener("change", function () {
-    localStorage.setItem("checkbox3", checkbox3.checked);
-    section3.style.display = checkbox3.checked ? "block" : "none";
-    reassignTasks();
-  });
-  checkbox4.addEventListener("change", function () {
-    localStorage.setItem("checkbox4", checkbox4.checked);
-    section4.style.display = checkbox4.checked ? "block" : "none";
-    reassignTasks();
-  });
-  checkbox5.addEventListener("change", function () {
-    localStorage.setItem("checkbox5", checkbox5.checked);
-    section5.style.display = checkbox5.checked ? "block" : "none";
-    reassignTasks();
-  });
-
-  tasksSection.style.display = "none";
-
-  var storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  for (var i = 0; i < storedTasks.length; i++) {
-    createTask(storedTasks[i]);
+  if (requiredElements.length !== Object.keys(elements).length) {
+    console.warn("Tasks could not initialize because required markup is missing.");
+    return;
   }
 
-  function createTask(task) {
-    var [year, month, day] = task.date.split('-').map(Number);
-    month -= 1;
-    var date = new Date(year, month, day);
+  const sectionConfigs = [
+    { id: "overdue", alwaysVisible: false },
+    { id: "due-today", alwaysVisible: true },
+    { id: "due-tomorrow", checkboxId: "checkbox1" },
+    { id: "due-this-week", checkboxId: "checkbox2" },
+    { id: "due-next-week", checkboxId: "checkbox3" },
+    { id: "due-this-month", checkboxId: "checkbox4" },
+    { id: "due-after", checkboxId: "checkbox5" }
+  ].map((config) => {
+    const section = dom.query(`#${config.id}`);
+    return Object.assign(config, {
+      checkbox: config.checkboxId ? dom.query(`#${config.checkboxId}`) : null,
+      container: section ? section.querySelector(".task-container") : null,
+      section
+    });
+  });
 
-    var taskSectionIndex = getTaskSection(new Date(year, month, day));
-    var taskSectionId = getSectionIdFromIndex(taskSectionIndex);
-    var taskContainer = document.querySelector('#' + taskSectionId + ' .task-container');
+  let activeTaskId = null;
 
-    var checkboxes = [checkbox1, checkbox2, checkbox3, checkbox4, checkbox5];
-    var sections = [section0, section1, section2, section3, section4, section5]; // update this line
+  initializeFilters();
+  populateCourseOptions(elements.createSubject);
+  populateCourseOptions(elements.editSubject);
+  renderTasks();
+  updateCreateButtonState();
+  updateEditButtonState();
 
-    var index = taskSectionIndex;
+  document.addEventListener(events.openTaskForm, showCreateDialog);
+  document.addEventListener(events.coursesChanged, function () {
+    populateCourseOptions(elements.createSubject, elements.createSubject.value);
+    populateCourseOptions(elements.editSubject, elements.editSubject.value);
+    renderTasks();
+  });
 
-    while (index < sections.length) {
-      console.log(index);
-      if (index === 0 || (index < checkboxes.length && checkboxes[index].checked)) {
+  [elements.createTitle, elements.createDate, elements.createSubject, elements.createDescription].forEach((input) => {
+    input.addEventListener("input", updateCreateButtonState);
+    input.addEventListener("change", updateCreateButtonState);
+  });
 
-        var taskContainer = sections[index].querySelector(".task-container");
-        // ... existing code to create and add the task to the taskContainer ...
-        break;
+  [elements.editTitle, elements.editDate, elements.editSubject, elements.editDescription].forEach((input) => {
+    input.addEventListener("input", updateEditButtonState);
+    input.addEventListener("change", updateEditButtonState);
+  });
+
+  elements.createSave.addEventListener("click", saveNewTask);
+  elements.createDiscard.addEventListener("click", hideTaskDialogs);
+  elements.editSave.addEventListener("click", saveTaskEdits);
+  elements.editDiscard.addEventListener("click", hideTaskDialogs);
+  elements.editComplete.addEventListener("click", completeActiveTask);
+
+  elements.overlay.addEventListener("click", function (event) {
+    if (event.target === elements.overlay && isAnyTaskDialogOpen()) {
+      hideTaskDialogs();
+    }
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && isAnyTaskDialogOpen()) {
+      hideTaskDialogs();
+    }
+  });
+
+  function initializeFilters() {
+    sectionConfigs.forEach((config) => {
+      if (!config.checkbox) {
+        return;
       }
-      index++;
-    }
 
-    var taskBox = document.createElement("div");
-    taskBox.classList.add("task-box");
+      const savedValue = localStorage.getItem(config.checkboxId);
+      config.checkbox.checked = savedValue === null ? true : savedValue === "true";
+      config.checkbox.addEventListener("change", function () {
+        localStorage.setItem(config.checkboxId, String(config.checkbox.checked));
+        renderTasks();
+      });
+    });
+  }
 
-    var taskBoxColor = document.createElement("div");
-    taskBoxColor.classList.add("task-color");
-    taskBoxColor.style.backgroundColor = task.color;
+  function renderTasks() {
+    const tasks = storage.getTasks().sort(sortTasks);
+    const counts = Object.fromEntries(sectionConfigs.map((config) => [config.id, 0]));
 
-    var textBox = document.createElement("div");
-    textBox.classList.add("text-box");
-
-    var titleBox = document.createElement("div");
-    titleBox.classList.add("task-title-box");
-    titleBox.textContent = task.title;
-
-    var dateBox = document.createElement("div");
-    dateBox.classList.add("task-date-box");
-    var [year, month, day] = task.date.split('-').map(Number);
-    month -= 1;
-    var date = new Date(year, month, day);
-    var month = date.toLocaleString('default', { month: 'short' });
-    var day = date.getDate();
-    dateBox.textContent = month + " " + day;
-
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-    date.setHours(0, 0, 0, 0);
-
-    if (date.getTime() === today.getTime()) {
-      dateBox.style.color = "#e1970a";
-      taskBox.classList.add("due-today");
-    } else if (date < today) {
-      dateBox.style.color = "#bf0c0c";
-      taskBox.classList.add("overdue");
-    }
-
-    var subjectBox = document.createElement("div");
-    subjectBox.classList.add("task-subject-box");
-    subjectBox.textContent = task.subject;
-
-    var descriptionBox = document.createElement("div");
-    descriptionBox.classList.add("task-description-box");
-    descriptionBox.textContent = task.description;
-
-    taskBox.appendChild(taskBoxColor);
-    textBox.appendChild(titleBox);
-    textBox.appendChild(subjectBox);
-    taskBox.appendChild(textBox);
-    taskBox.appendChild(dateBox);
-    taskBox.appendChild(descriptionBox);
-
-    taskBox.addEventListener("click", function() {
-      var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-      var currentTaskIndex = tasks.findIndex(t => t.id === task.id);
-      if (currentTaskIndex !== -1) {
-        showTasksOverlay(tasks[currentTaskIndex], taskBox);
+    sectionConfigs.forEach((config) => {
+      if (config.container) {
+        config.container.textContent = "";
       }
     });
 
-    if (date < today) {
-      // Task is overdue, add it to the overdue section and show the overdue section
-      overdueSection.style.display = "block";
-      overdueTaskContainer.appendChild(taskBox);
-      return; // Exit the function here, no need to add it to other sections
-    }
+    tasks.forEach((task) => {
+      const bucket = dates.getTaskBucket(task.date);
+      const section = sectionConfigs.find((config) => config.id === bucket);
 
-    taskContainer.appendChild(taskBox);
+      if (!section || !section.container || !isSectionVisible(section)) {
+        return;
+      }
 
-    var selectedSubject = subjectSelect.value;
-    var courses = JSON.parse(localStorage.getItem('courses')) || [];
-    var selectedCourse = courses.find(function (course) {
-      return course.name === selectedSubject;
-    });
-    var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-    taskBoxColor.style.backgroundColor = task.color;
-  }
-
-  var courses = JSON.parse(localStorage.getItem('courses')) || [];
-  var taskSubjectSelect = document.querySelector('#taskSubject');
-
-  courses.forEach(function (course) {
-    var option = document.createElement('option');
-    option.value = course.name;
-    option.textContent = course.name;
-    taskSubjectSelect.appendChild(option);
-  });
-
-  function getSectionIdFromIndex(index) {
-    const sectionIds = ["due-today", "due-tomorrow", "due-this-week", "due-next-week", "due-this-month", "due-after"];
-    return sectionIds[index];
-  }
-
-  function showTasksOverlay(task, taskBox) {
-    overlay.style.display = "flex";
-    tasksOverlay.style.display = "flex";
-    tasksOverlayLeft.style.display = "flex";
-
-    if (task) {
-      document.querySelector('#taskTitle').value = task.title;
-      document.querySelector('#taskSubject').value = task.subject;
-      document.querySelector('#taskDate').value = task.date;
-      document.querySelector('#taskDescription').value = task.description;
-    }
-
-    var [year, month, day] = task.date.split('-').map(Number);
-    month -= 1;
-    var date = new Date(year, month, day);
-    var monthName = date.toLocaleString('default', { month: 'short' });
-    var dayNumber = date.getDate();
-    document.querySelector('#taskDate').textContent = monthName + " " + dayNumber;
-
-    document.querySelector('#taskDescription').textContent = task.description;
-
-    var courses = JSON.parse(localStorage.getItem('courses')) || [];
-
-    if (!courses.some(course => course.name === task.subject)) {
-      task.subject = 'No Subject';
-    }
-
-    var taskSubjectSelect = document.querySelector('#taskSubject');
-
-    // Clear the options in the select element
-    taskSubjectSelect.innerHTML = '';
-
-    var selectedSubject = task.subject;
-    taskSubjectSelect.value = selectedSubject;
-
-    courses.forEach(function (course) {
-      var option = document.createElement('option');
-      option.value = course.name;
-      option.textContent = course.name;
-      taskSubjectSelect.appendChild(option);
+      section.container.appendChild(createTaskCard(task, bucket));
+      counts[bucket] += 1;
     });
 
-    var selectedCourse = courses.find(function (course) {
-      return course.name === selectedSubject;
-    });
+    sectionConfigs.forEach((config) => {
+      const hasTasks = counts[config.id] > 0;
+      const shouldShow = config.id === "overdue" ? hasTasks : isSectionVisible(config);
 
-    var selectedSubject = task.subject;
-    taskSubjectSelect.value = selectedSubject;
+      dom.setVisible(config.section, shouldShow, "flex");
 
-    var selectedCourse = courses.find(function (course) {
-      return course.name === selectedSubject;
-    });
-
-    var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-    tasksOverlayLeft.style.backgroundColor = selectedCourseColor;
-
-    // Update the task-color
-    var taskColor = taskBox.querySelector('.task-color');
-    taskColor.style.backgroundColor = selectedCourseColor;
-
-    tasksOverlay.task = task;
-    tasksOverlay.taskBox = taskBox;
-  }
-
-
-  function hideTasksOverlay() {
-    overlay.style.display = "none";
-    tasksSection.style.display = "none";
-    tasksOverlay.style.display = "none";
-    taskTitleInput.value = "";
-    taskDescriptionTextarea.value = "";
-    dueDateInput.value = "";
-    subjectSelect.value = "";
-  }
-
-  function getTaskSection(date) {
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    var tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    var startOfWeek = new Date(today);
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1));
-
-    var endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 6);
-
-    var startOfNextWeek = new Date(endOfWeek);
-    startOfNextWeek.setDate(startOfNextWeek.getDate() + 1);
-
-    var endOfNextWeek = new Date(startOfNextWeek);
-    endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);
-
-    var startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    var endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-    if (date.getTime() === today.getTime()) {
-      return 0;  // Due today
-    } else if (date.getTime() === tomorrow.getTime()) {
-      return 1;  // Due tomorrow
-    } else if (date > tomorrow && date <= endOfWeek) {
-      return 2;  // Due this week
-    } else if (date > endOfWeek && date <= endOfNextWeek) {
-      return 3;  // Due next week
-    } else if (date > endOfNextWeek && date <= endOfMonth) {
-      return 4;  // Due this month
-    } else {
-      return 5;  // Due after
-    }
-  }
-
-  function reassignTasks() {
-    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
-    // Remove all tasks from the DOM
-    var taskBoxes = document.querySelectorAll('.task-box');
-    taskBoxes.forEach(function (taskBox) {
-      taskBox.remove();
-    });
-
-    // Recreate all tasks
-    tasks.forEach(function (task) {
-      createTask(task);
+      if (shouldShow && config.container && !hasTasks) {
+        config.container.appendChild(createEmptyState(config.id));
+      }
     });
   }
 
-  /**
-   * @description save button used in the creation of new tasks or the AddTaskWindow.
-   */
-  saveButton.addEventListener("click", function () {
-    var selectedSubject = subjectSelect.value;
-    var courses = JSON.parse(localStorage.getItem('courses')) || [];
-    var selectedCourse = courses.find(function (course) {
-      return course.name === selectedSubject;
-    });
-    var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
-
-    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
-    var newTask = {
-      id: Date.now(),  // Use the current timestamp as a unique ID
-      title: taskTitleInput.value,
-      description: taskDescriptionTextarea.value,
-      date: dueDateInput.value,
-      subject: subjectSelect.value,
-      color: selectedCourseColor
-    };
-
-    createTask(newTask);
-
-    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks.push(newTask);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-
-    hideTasksOverlay();
-  });
-
-  /**
-   * @description used in the taskOverlay for saving edits to an existing task.
-   */
-  document.querySelector('#saveButton').addEventListener("click", function () {
-    var title = document.querySelector('#taskTitle').value;
-    var dateString = document.querySelector('#taskDate').value;
-    var subject = document.querySelector('#taskSubject').value;
-    var description = document.querySelector('#taskDescription').value;
-
-    var courses = JSON.parse(localStorage.getItem('courses')) || [];
-
-    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    var index = tasks.findIndex(t => t.id === tasksOverlay.task.id);
-
-    var selectedSubject = document.querySelector('#taskSubject').value;
-    var selectedCourse = courses.find(function (course) {
-      return course.name === selectedSubject;
+  function createTaskCard(task, bucket) {
+    const accentColor = courses.getCourseColor(task.subject, task.color);
+    const taskBox = dom.createElement("button", {
+      className: `task-box ${bucket}`,
+      attributes: {
+        type: "button",
+        "data-task-id": task.id,
+        "aria-label": `Edit ${task.title}`
+      }
     });
 
-    var selectedCourseColor = selectedCourse ? selectedCourse.color : '';
+    const colorBox = dom.createElement("span", {
+      className: "task-color",
+      styles: { backgroundColor: accentColor }
+    });
+    const textBox = dom.createElement("span", { className: "text-box" });
+    const titleBox = dom.createElement("span", { className: "task-title-box", text: task.title || "Untitled task" });
+    const subjectBox = dom.createElement("span", { className: "task-subject-box", text: task.subject || "No course" });
+    const dateBox = dom.createElement("span", {
+      className: "task-date-box",
+      text: dates.formatShortDate(task.date)
+    });
+    const descriptionBox = dom.createElement("span", {
+      className: "task-description-box",
+      text: task.description
+    });
 
-    var [year, month, day] = dateString.split('-').map(Number);
-    month -= 1;  // Adjust the month number
-    var date = new Date(year, month, day);
-
-
-    var updatedTask = {
-      id: tasksOverlay.task.id,  // Preserve the original ID
-      title: title,
-      description: description,
-      date: dateString,
-      subject: subject,
-      color: selectedCourseColor
-    };
-
-    if (index > -1) {
-      tasks[index] = updatedTask;  // Update the task in the array
-      tasksOverlay.taskBox.remove();  // Remove the old task from the DOM
-      createTask(updatedTask);  // Recreate the task so it gets placed in the correct section
-    } else {
-      tasks.push(updatedTask);
-    }
-
-
-    var taskBox = tasksOverlay.taskBox;
-    taskBox.querySelector('.task-title-box').textContent = title;
-    taskBox.querySelector('.task-subject-box').textContent = subject;
-    taskBox.querySelector('.task-description-box').textContent = description;
-
-    var dateBox = taskBox.querySelector('.task-date-box');
-    dateBox.textContent = date.toLocaleString('default', { month: 'short' }) + " " + date.getDate();
-
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-    date.setHours(0, 0, 0, 0);
-
-    taskBox.classList.remove("due-today");
-    taskBox.classList.remove("overdue");
-
-    if (date.getTime() === today.getTime()) {
-      dateBox.style.color = "#e1970a";
+    if (bucket === "due-today") {
       taskBox.classList.add("due-today");
-    } else if (date < today) {
-      dateBox.style.color = "#bf0c0c";
+    }
+
+    if (bucket === "overdue") {
       taskBox.classList.add("overdue");
-    } else {
-      dateBox.style.color = "#2E8B57";
     }
 
-    var taskColor = taskBox.querySelector('.task-color');
-    taskColor.style.backgroundColor = updatedTask.color;
+    textBox.append(titleBox, subjectBox);
+    taskBox.append(colorBox, textBox, dateBox, descriptionBox);
+    taskBox.addEventListener("click", function () {
+      openTaskEditor(task.id);
+    });
 
-    tasksOverlayLeft.style.backgroundColor = updatedTask.color;
+    return taskBox;
+  }
 
-    tasksOverlay.task = updatedTask;
+  function createEmptyState(sectionId) {
+    const messages = {
+      "due-today": "Nothing due today.",
+      "due-tomorrow": "No tasks due tomorrow.",
+      "due-this-week": "No tasks due later this week.",
+      "due-next-week": "No tasks due next week.",
+      "due-this-month": "No tasks due later this month.",
+      "due-after": "No long-range tasks yet."
+    };
 
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    return dom.createElement("p", {
+      className: "empty-state",
+      text: messages[sectionId] || "No tasks here."
+    });
+  }
 
-    hideTasksOverlay();
-  });
+  function isSectionVisible(config) {
+    return config.alwaysVisible || !config.checkbox || config.checkbox.checked;
+  }
 
-  overlay.addEventListener('click', function (event) {
-    if (event.target === overlay) {
-      hideTasksOverlay();
+  function showCreateDialog() {
+    resetCreateForm();
+    populateCourseOptions(elements.createSubject);
+    dom.setVisible(elements.overlay, true, "block");
+    dom.setVisible(elements.createWindow, true, "grid");
+    elements.createTitle.focus();
+  }
+
+  function openTaskEditor(taskId) {
+    const task = storage.getTasks().find((item) => String(item.id) === String(taskId));
+
+    if (!task) {
+      dom.notify("That task could not be found.");
+      renderTasks();
+      return;
     }
-  });
 
-  discardButton.addEventListener("click", function () {
-    overlay.style.display = "none";
-    tasksSection.style.display = "none";
-    taskTitleInput.value = "";
-    taskDescriptionTextarea.value = "";
-    dueDateInput.value = "";
-    subjectSelect.value = "";
-  });
+    activeTaskId = task.id;
+    populateCourseOptions(elements.editSubject, task.subject);
+    elements.editTitle.value = task.title;
+    elements.editDate.value = task.date;
+    elements.editSubject.value = task.subject;
+    elements.editDescription.value = task.description;
+    elements.editAccent.style.backgroundColor = courses.getCourseColor(task.subject, task.color);
+    elements.editMessage.textContent = "";
 
-  document.querySelector('#discardButton').addEventListener('click', function () {
-    hideTasksOverlay();
-  });
+    updateEditButtonState();
+    dom.setVisible(elements.overlay, true, "block");
+    dom.setVisible(elements.editOverlay, true, "flex");
+    elements.editTitle.focus();
+  }
 
-  document.querySelector('#completeButton').addEventListener("click", function () {
-    var title = document.querySelector('#taskTitle').value;
-    var date = document.querySelector('#taskDate').value;
-    var subject = document.querySelector('#taskSubject').value;
-    var description = document.querySelector('#taskDescription').value;
-  
-    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    var index = tasks.findIndex(t => t.title === title && t.date === date && t.subject === subject && t.description === description);
-    if (index > -1) {
-      tasks.splice(index, 1);
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      tasksOverlay.taskBox.remove();
+  function saveNewTask() {
+    const nextTask = getCreatePayload({ includeId: true });
+    const validation = validateTask(nextTask);
+
+    if (!validation.isValid) {
+      elements.createMessage.textContent = validation.message;
+      updateCreateButtonState();
+      return;
     }
-  
-    // Check if there are any tasks left in the "overdue" section
-    var overdueTasks = document.querySelectorAll('#overdue .task-box');
-    if (overdueTasks.length === 0) {
-      // If there are no tasks left, hide the "overdue" section
-      overdueSection.style.display = "none";
+
+    try {
+      const tasks = storage.getTasks();
+      storage.saveTasks(tasks.concat(nextTask));
+      renderTasks();
+      hideTaskDialogs();
+      dom.notify("Task created.");
+    } catch (error) {
+      elements.createMessage.textContent = "The task could not be saved. Please try again.";
+      console.warn("Unable to save task.", error);
     }
-  
-    hideTasksOverlay();
-  });  
+  }
+
+  function saveTaskEdits() {
+    if (!activeTaskId) {
+      return;
+    }
+
+    const updatedTask = getEditPayload();
+    const validation = validateTask(updatedTask);
+
+    if (!validation.isValid) {
+      elements.editMessage.textContent = validation.message;
+      updateEditButtonState();
+      return;
+    }
+
+    const tasks = storage.getTasks();
+    const index = tasks.findIndex((task) => String(task.id) === String(activeTaskId));
+
+    if (index === -1) {
+      elements.editMessage.textContent = "This task no longer exists.";
+      return;
+    }
+
+    try {
+      tasks[index] = updatedTask;
+      storage.saveTasks(tasks);
+      renderTasks();
+      hideTaskDialogs();
+      dom.notify("Task updated.");
+    } catch (error) {
+      elements.editMessage.textContent = "The task could not be updated. Please try again.";
+      console.warn("Unable to update task.", error);
+    }
+  }
+
+  function completeActiveTask() {
+    if (!activeTaskId) {
+      return;
+    }
+
+    try {
+      const tasks = storage.getTasks().filter((task) => String(task.id) !== String(activeTaskId));
+      storage.saveTasks(tasks);
+      renderTasks();
+      hideTaskDialogs();
+      dom.notify("Task completed.");
+    } catch (error) {
+      elements.editMessage.textContent = "The task could not be completed. Please try again.";
+      console.warn("Unable to complete task.", error);
+    }
+  }
+
+  function hideTaskDialogs() {
+    dom.setVisible(elements.createWindow, false);
+    dom.setVisible(elements.editOverlay, false);
+    dom.setVisible(elements.overlay, false);
+    activeTaskId = null;
+    resetCreateForm();
+    resetEditForm();
+  }
+
+  function isAnyTaskDialogOpen() {
+    return !elements.createWindow.hidden || !elements.editOverlay.hidden;
+  }
+
+  function resetCreateForm() {
+    elements.createTitle.value = "";
+    elements.createDescription.value = "";
+    elements.createDate.value = "";
+    elements.createSubject.value = "";
+    elements.createMessage.textContent = "";
+    updateCreateButtonState();
+  }
+
+  function resetEditForm() {
+    elements.editTitle.value = "";
+    elements.editDescription.value = "";
+    elements.editDate.value = "";
+    elements.editSubject.value = "";
+    elements.editMessage.textContent = "";
+    updateEditButtonState();
+  }
+
+  function getCreatePayload(options) {
+    const subject = elements.createSubject.value;
+    const config = options || {};
+
+    return {
+      id: config.includeId ? createTaskId() : "",
+      title: elements.createTitle.value.trim(),
+      description: elements.createDescription.value.trim(),
+      date: elements.createDate.value,
+      subject,
+      color: courses.getCourseColor(subject, colors.fallbackTask)
+    };
+  }
+
+  function getEditPayload() {
+    const subject = elements.editSubject.value;
+
+    return {
+      id: activeTaskId,
+      title: elements.editTitle.value.trim(),
+      description: elements.editDescription.value.trim(),
+      date: elements.editDate.value,
+      subject,
+      color: courses.getCourseColor(subject, colors.fallbackTask)
+    };
+  }
+
+  function validateTask(task) {
+    if (!task.title) {
+      return { isValid: false, message: "Add a title before saving." };
+    }
+
+    if (!dates.parseLocalDate(task.date)) {
+      return { isValid: false, message: "Choose a valid due date." };
+    }
+
+    return { isValid: true, message: "" };
+  }
+
+  function updateCreateButtonState() {
+    const validation = validateTask(getCreatePayload());
+    elements.createSave.disabled = !validation.isValid;
+
+    if (validation.isValid) {
+      elements.createMessage.textContent = "";
+    }
+  }
+
+  function updateEditButtonState() {
+    const validation = validateTask(getEditPayload());
+    elements.editSave.disabled = !validation.isValid;
+
+    if (validation.isValid) {
+      elements.editMessage.textContent = "";
+    }
+  }
+
+  function populateCourseOptions(select, selectedValue) {
+    const courseList = storage.getCourses();
+    const previousValue = selectedValue || "";
+    select.textContent = "";
+    select.appendChild(new Option("No course", ""));
+
+    courseList.forEach((course) => {
+      select.appendChild(new Option(course.name, course.name));
+    });
+
+    if (previousValue && !courseList.some((course) => course.name === previousValue)) {
+      select.appendChild(new Option(`${previousValue} (removed)`, previousValue));
+    }
+
+    select.value = previousValue;
+  }
+
+  function sortTasks(firstTask, secondTask) {
+    const firstDate = dates.parseLocalDate(firstTask.date);
+    const secondDate = dates.parseLocalDate(secondTask.date);
+    const firstTime = firstDate ? firstDate.getTime() : Number.MAX_SAFE_INTEGER;
+    const secondTime = secondDate ? secondDate.getTime() : Number.MAX_SAFE_INTEGER;
+
+    if (firstTime !== secondTime) {
+      return firstTime - secondTime;
+    }
+
+    return firstTask.title.localeCompare(secondTask.title);
+  }
+
+  function createTaskId() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return window.crypto.randomUUID();
+    }
+
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
 });

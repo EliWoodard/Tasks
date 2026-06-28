@@ -1,99 +1,146 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const gearImage = document.getElementById('gearImage');
-  const settingsOverlay = document.getElementById('settingsOverlay');
-  const closeButton = document.querySelector('#closeButton');
+document.addEventListener("DOMContentLoaded", function () {
+  const { dom, format, storage, storageKeys } = window.TasksApp;
 
-  let mouseDown = false;
-  let offsetX = 0, offsetY = 0;
+  const elements = {
+    settingsButton: dom.query("#settingsButton"),
+    settingsOverlay: dom.query("#settingsOverlay"),
+    closeButton: dom.query("#closeButton"),
+    clearCacheButton: dom.query("#clearCache"),
+    tabs: {
+      profile: dom.query("#profile-button"),
+      filters: dom.query("#filters-button"),
+      background: dom.query("#background-button")
+    },
+    pages: {
+      profile: dom.query("#profilePage"),
+      filters: dom.query("#filterPage"),
+      background: dom.query("#backgroundPage")
+    },
+    tasksSize: dom.query("#tasksSize"),
+    coursesSize: dom.query("#coursesSize"),
+    totalSize: dom.query("#totalSize"),
+    availableSize: dom.query("#availableSize")
+  };
 
-  // varaiables
-  var profileSettings = document.getElementById("profile-button");
-  var filterSettings = document.getElementById("filters-button");
-  var backgroundSettings = document.getElementById("background-button");
-
-  profileSettings.addEventListener("click", function() {
-    profileSettings.classList.add("active");
-    filterSettings.classList.remove("active");
-    backgroundSettings.classList.remove("active");
-  });
-
-  filterSettings.addEventListener("click", function() {
-    filterSettings.classList.add("active");
-    profileSettings.classList.remove("active");
-    backgroundSettings.classList.remove("active");
-  });
-
-  backgroundSettings.addEventListener("click", function() {
-    backgroundSettings.classList.add("active");
-    profileSettings.classList.remove("active");
-    filterSettings.classList.remove("active");
-  });
-
-  //Cache
-  const savedPosition = localStorage.getItem('settingsOverlayPosition');
-  if (savedPosition) {
-    const pos = JSON.parse(savedPosition);
-    settingsOverlay.style.top = pos.top;
-    settingsOverlay.style.left = pos.left;
+  if (!elements.settingsButton || !elements.settingsOverlay || !elements.closeButton) {
+    return;
   }
 
-  settingsOverlay.addEventListener('mousedown', function(e) {
-    mouseDown = true;
-    offsetX = e.clientX - (parseInt(settingsOverlay.offsetLeft) || 0);
-    offsetY = e.clientY - (parseInt(settingsOverlay.offsetTop) || 0);
-  });
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
 
-  document.addEventListener('mousemove', function(e) {
-    if (mouseDown) {
-      settingsOverlay.style.left = (e.clientX - offsetX) + 'px';
-      settingsOverlay.style.top = (e.clientY - offsetY) + 'px';
+  restorePosition();
+  switchSettingsPage("profile");
+
+  elements.settingsButton.addEventListener("click", function (event) {
+    event.stopPropagation();
+    const shouldOpen = elements.settingsOverlay.hidden;
+    dom.setVisible(elements.settingsOverlay, shouldOpen, "flex");
+    elements.settingsButton.setAttribute("aria-expanded", String(shouldOpen));
+
+    if (shouldOpen) {
+      calculateCacheSize();
     }
   });
 
-  document.addEventListener('mouseup', function() {
-    mouseDown = false;
+  elements.closeButton.addEventListener("click", closeSettings);
 
-    const pos = {
-      left: settingsOverlay.style.left,
-      top: settingsOverlay.style.top
-    };
-    localStorage.setItem('settingsOverlayPosition', JSON.stringify(pos));
+  Object.entries(elements.tabs).forEach(([pageName, button]) => {
+    button.addEventListener("click", function () {
+      switchSettingsPage(pageName);
+    });
   });
 
-  gearImage.addEventListener('click', function(e) {
-    e.stopPropagation(); 
-    settingsOverlay.style.display = settingsOverlay.style.display === 'flex' ? 'none' : 'flex';
+  elements.clearCacheButton.addEventListener("click", function () {
+    const shouldClear = window.confirm("Clear all saved tasks, courses, and preferences?");
 
-    calculateCacheSize();
-  });
+    if (!shouldClear) {
+      return;
+    }
 
-  closeButton.addEventListener('click', function() {
-    settingsOverlay.style.display = 'none';
-  });
-
-  document.getElementById('clearCache').addEventListener('click', function() {
     localStorage.clear();
-    location.reload();
+    window.location.reload();
   });
+
+  elements.settingsOverlay.addEventListener("mousedown", function (event) {
+    if (event.target.closest("button, input, label, select")) {
+      return;
+    }
+
+    isDragging = true;
+    offsetX = event.clientX - (parseInt(elements.settingsOverlay.offsetLeft, 10) || 0);
+    offsetY = event.clientY - (parseInt(elements.settingsOverlay.offsetTop, 10) || 0);
+  });
+
+  document.addEventListener("mousemove", function (event) {
+    if (!isDragging) {
+      return;
+    }
+
+    elements.settingsOverlay.style.left = `${event.clientX - offsetX}px`;
+    elements.settingsOverlay.style.top = `${event.clientY - offsetY}px`;
+  });
+
+  document.addEventListener("mouseup", function () {
+    if (!isDragging) {
+      return;
+    }
+
+    isDragging = false;
+    localStorage.setItem(storageKeys.settingsPosition, JSON.stringify({
+      left: elements.settingsOverlay.style.left,
+      top: elements.settingsOverlay.style.top
+    }));
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !elements.settingsOverlay.hidden) {
+      closeSettings();
+    }
+  });
+
+  function switchSettingsPage(pageName) {
+    Object.entries(elements.tabs).forEach(([name, button]) => {
+      const isActive = name === pageName;
+      button.classList.toggle("active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+      dom.setVisible(elements.pages[name], isActive, "flex");
+    });
+  }
+
+  function closeSettings() {
+    dom.setVisible(elements.settingsOverlay, false);
+    elements.settingsButton.setAttribute("aria-expanded", "false");
+  }
+
+  function restorePosition() {
+    const savedPosition = storage.safeParse(localStorage.getItem(storageKeys.settingsPosition), null);
+
+    if (!savedPosition) {
+      return;
+    }
+
+    if (savedPosition.top) {
+      elements.settingsOverlay.style.top = savedPosition.top;
+    }
+
+    if (savedPosition.left) {
+      elements.settingsOverlay.style.left = savedPosition.left;
+    }
+  }
 
   function calculateCacheSize() {
-    document.getElementById('tasksSize').textContent = "Tasks Size: ";
-    document.getElementById('coursesSize').textContent = "Courses Size: ";
-    document.getElementById('totalSize').textContent = "Total Size: ";
-    document.getElementById('availableSize').textContent = "Available Size: ";
+    const tasksRaw = localStorage.getItem(storageKeys.tasks) || "[]";
+    const coursesRaw = localStorage.getItem(storageKeys.courses) || "[]";
+    const tasksSize = tasksRaw.length;
+    const coursesSize = coursesRaw.length;
+    const totalSize = tasksSize + coursesSize;
+    const availableSize = 5 * 1024 * 1024 - totalSize;
 
-    var storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    var tasksSize = JSON.stringify(storedTasks).length;
-    document.getElementById('tasksSize').textContent += tasksSize - 2 + " bytes";
-
-    var storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
-    var coursesSize = JSON.stringify(storedCourses).length;
-    document.getElementById('coursesSize').textContent += coursesSize - 2 + " bytes";
-
-    var totalSize = tasksSize + coursesSize - 4;
-    document.getElementById('totalSize').textContent += totalSize + " bytes";
-
-    var availableSize = 5 * 1024 * 1024 - totalSize - 4; 
-    document.getElementById('availableSize').textContent += availableSize + " bytes";
-}
+    elements.tasksSize.textContent = `Tasks Size: ${format.bytes(tasksSize)}`;
+    elements.coursesSize.textContent = `Courses Size: ${format.bytes(coursesSize)}`;
+    elements.totalSize.textContent = `Total Size: ${format.bytes(totalSize)}`;
+    elements.availableSize.textContent = `Available Size: ${format.bytes(availableSize)}`;
+  }
 });

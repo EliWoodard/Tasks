@@ -1,153 +1,191 @@
-document.addEventListener("DOMContentLoaded", function() {
-  var addCourseButton = document.querySelector(".add-course-button");
-  var courseWindow = document.querySelector(".AddCourseWindow");
-  var overlay = document.querySelector(".overlay");
-  var discardCourseButton = document.querySelector("#discard-course-button");
-  var saveCourseButton = document.querySelector("#save-course-button");
-  var courseNameInput = document.querySelector("#course-name");
-  var courseColorInput = document.querySelector("#course-color");
-  var coursesContainer = document.querySelector(".Courses");
+document.addEventListener("DOMContentLoaded", function () {
+  const { dom, events, storage } = window.TasksApp;
 
-  var storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
- for (var i = 0; i < storedCourses.length; i++) {
-   createCourse(storedCourses[i]);
- }
+  const elements = {
+    addButton: dom.query(".add-course-button"),
+    courseWindow: dom.query(".AddCourseWindow"),
+    overlay: dom.query(".overlay"),
+    discardButton: dom.query("#discard-course-button"),
+    saveButton: dom.query("#save-course-button"),
+    nameInput: dom.query("#course-name"),
+    colorInput: dom.query("#course-color"),
+    message: dom.query("#courseFormMessage"),
+    coursesContainer: dom.query(".Courses")
+  };
 
- function createCourse(course) {
-   var courseBox = document.createElement("div");
-   courseBox.classList.add("course-box");
+  if (Object.values(elements).some((element) => !element)) {
+    console.warn("Courses could not initialize because required markup is missing.");
+    return;
+  }
 
-   var colorBox = document.createElement("div");
-   colorBox.style.backgroundColor = course.color;
-   colorBox.classList.add("course-color-box");
+  renderCourses();
+  updateSaveButton();
 
-   var textBox = document.createElement("div");
-   textBox.textContent = course.name;
-   textBox.classList.add("course-text-box");
+  elements.addButton.addEventListener("click", showCourseDialog);
+  elements.discardButton.addEventListener("click", hideCourseDialog);
+  elements.saveButton.addEventListener("click", saveCourse);
+  elements.nameInput.addEventListener("input", updateSaveButton);
+  elements.colorInput.addEventListener("change", updateSaveButton);
 
-   var deleteWindow = document.createElement("div");
-   deleteWindow.classList.add("CourseDeleteWindow");
-
-   var deleteButton = document.createElement("button");
-   deleteButton.id = "delete-course-button";
-   deleteButton.textContent = "Remove";
-
-   courseBox.appendChild(colorBox);
-   courseBox.appendChild(textBox);
-   courseBox.appendChild(deleteWindow);
-   deleteWindow.appendChild(deleteButton);
-   coursesContainer.appendChild(courseBox);
-
-   var subjectSelect = document.querySelector("#subject-select");
-   var newOption = document.createElement("option");
-   newOption.text = course.name;
-   newOption.value = course.name;
-   subjectSelect.add(newOption);
-
-   courseBox.addEventListener("click", function() {
-     this.classList.toggle("clicked");
-   });
-
-   deleteButton.addEventListener("click", function(event) {
-     event.stopPropagation();
-     courseBox.remove();
-     var options = Array.from(subjectSelect.options);
-     var optionToRemove = options.find(function(option) {
-       return option.value === course.name;
-     });
-     if (optionToRemove) {
-       subjectSelect.removeChild(optionToRemove);
-     }
-
-     var courses = JSON.parse(localStorage.getItem('courses')) || [];
-     var index = courses.findIndex(c => c.name === course.name && c.color === course.color);
-     if (index > -1) {
-       courses.splice(index, 1);
-       localStorage.setItem('courses', JSON.stringify(courses));
-     }
-   });
- }
-
- overlay.addEventListener('click', function(event) {
-    if (event.target === overlay) {
-        discardCourseButton.click();
+  elements.overlay.addEventListener("click", function (event) {
+    if (event.target === elements.overlay && !elements.courseWindow.hidden) {
+      hideCourseDialog();
     }
   });
 
-  addCourseButton.addEventListener("click", function() {
-   console.log("Add course button clicked!");
-   overlay.style.display = "flex";
-   courseWindow.style.display = "flex";
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !elements.courseWindow.hidden) {
+      hideCourseDialog();
+    }
   });
 
-  discardCourseButton.addEventListener("click", function() {
-    overlay.style.display = "none";
-    courseWindow.style.display = "none";
-    courseNameInput.value = "";
-    courseColorInput.value = "none";
-  });
+  function renderCourses() {
+    const courses = storage.getCourses().sort((firstCourse, secondCourse) => firstCourse.name.localeCompare(secondCourse.name));
+    elements.coursesContainer.textContent = "";
 
+    if (!courses.length) {
+      elements.coursesContainer.appendChild(dom.createElement("p", {
+        className: "empty-state course-empty-state",
+        text: "Add a course to start organizing tasks by subject."
+      }));
+      return;
+    }
 
-  saveCourseButton.addEventListener("click", function() {
-    console.log("Save course button clicked!");
-
-    var newCourse = {
-      name: courseNameInput.value,
-      color: courseColorInput.value
-    };
-
-    var courses = JSON.parse(localStorage.getItem('courses')) || [];
-    courses.push(newCourse);
-    localStorage.setItem('courses', JSON.stringify(courses));
-
-    var courseBox = document.createElement("div");
-    courseBox.classList.add("course-box");
-
-    var colorBox = document.createElement("div");
-    colorBox.style.backgroundColor = courseColorInput.value;
-    colorBox.classList.add("course-color-box");
-
-    var textBox = document.createElement("div");
-    textBox.textContent = courseNameInput.value;
-    textBox.classList.add("course-text-box");
-
-    var deleteWindow = document.createElement("div");
-    deleteWindow.classList.add("CourseDeleteWindow");
-
-    var deleteButton = document.createElement("button");
-    deleteButton.id = "delete-course-button";
-    deleteButton.textContent = "Remove";
-
-    courseBox.appendChild(colorBox);
-    courseBox.appendChild(textBox);
-    courseBox.appendChild(deleteWindow);
-    deleteWindow.appendChild(deleteButton);
-    coursesContainer.appendChild(courseBox);
-
-    var subjectSelect = document.querySelector("#subject-select");
-    var newOption = document.createElement("option");
-    newOption.text = courseNameInput.value;
-    newOption.value = courseNameInput.value;
-    subjectSelect.add(newOption);
-
-    var courseNameValue = courseNameInput.value;
-
-    discardCourseButton.click();
-
-    courseBox.addEventListener("click", function() {
-      this.classList.toggle("clicked");
+    courses.forEach((course) => {
+      elements.coursesContainer.appendChild(createCourseCard(course));
     });
+  }
 
-    deleteButton.addEventListener("click", function(event) {
-      event.stopPropagation();
-      courseBox.remove();
-      var options = Array.from(subjectSelect.options);
-      var optionToRemove = options.find(function(option) {
-        return option.value === courseNameValue;
-      });
-      if (optionToRemove) {
-        subjectSelect.removeChild(optionToRemove);
+  function createCourseCard(course) {
+    const courseBox = dom.createElement("article", {
+      className: "course-box",
+      attributes: {
+        "data-course-name": course.name
       }
     });
-  });
+    const colorBox = dom.createElement("span", {
+      className: "course-color-box",
+      styles: { backgroundColor: course.color }
+    });
+    const textBox = dom.createElement("span", {
+      className: "course-text-box",
+      text: course.name
+    });
+    const actions = dom.createElement("div", { className: "CourseDeleteWindow" });
+    const deleteButton = dom.createElement("button", {
+      className: "delete-course-button",
+      text: "Remove",
+      attributes: {
+        type: "button",
+        "aria-label": `Remove ${course.name}`
+      }
+    });
+
+    actions.appendChild(deleteButton);
+    courseBox.append(colorBox, textBox, actions);
+
+    courseBox.addEventListener("click", function () {
+      const isExpanded = courseBox.classList.toggle("clicked");
+      courseBox.setAttribute("aria-expanded", String(isExpanded));
+    });
+
+    deleteButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      removeCourse(course);
+    });
+
+    return courseBox;
+  }
+
+  function showCourseDialog() {
+    resetForm();
+    dom.setVisible(elements.overlay, true, "block");
+    dom.setVisible(elements.courseWindow, true, "flex");
+    elements.nameInput.focus();
+  }
+
+  function hideCourseDialog() {
+    dom.setVisible(elements.courseWindow, false);
+    dom.setVisible(elements.overlay, false);
+    resetForm();
+  }
+
+  function saveCourse() {
+    const course = {
+      name: elements.nameInput.value.trim(),
+      color: elements.colorInput.value
+    };
+    const validation = validateCourse(course);
+
+    if (!validation.isValid) {
+      elements.message.textContent = validation.message;
+      updateSaveButton();
+      return;
+    }
+
+    try {
+      const courses = storage.getCourses().concat(course);
+      storage.saveCourses(courses);
+      renderCourses();
+      dom.emit(events.coursesChanged, { courses });
+      dom.notify("Course added.");
+      hideCourseDialog();
+    } catch (error) {
+      elements.message.textContent = "The course could not be saved. Please try again.";
+      console.warn("Unable to save course.", error);
+    }
+  }
+
+  function removeCourse(courseToRemove) {
+    const shouldRemove = window.confirm(`Remove ${courseToRemove.name}? Tasks using this course will keep their saved label.`);
+
+    if (!shouldRemove) {
+      return;
+    }
+
+    try {
+      const courses = storage.getCourses().filter((course) => course.name !== courseToRemove.name);
+      storage.saveCourses(courses);
+      renderCourses();
+      dom.emit(events.coursesChanged, { courses });
+      dom.notify("Course removed.");
+    } catch (error) {
+      elements.message.textContent = "The course could not be removed. Please try again.";
+      console.warn("Unable to remove course.", error);
+    }
+  }
+
+  function resetForm() {
+    elements.nameInput.value = "";
+    elements.colorInput.value = window.TasksApp.colors.defaultCourse;
+    elements.message.textContent = "";
+    updateSaveButton();
+  }
+
+  function validateCourse(course) {
+    if (!course.name) {
+      return { isValid: false, message: "Add a course name before saving." };
+    }
+
+    const duplicate = storage.getCourses().some((savedCourse) => savedCourse.name.toLowerCase() === course.name.toLowerCase());
+
+    if (duplicate) {
+      return { isValid: false, message: "A course with this name already exists." };
+    }
+
+    return { isValid: true, message: "" };
+  }
+
+  function updateSaveButton() {
+    const validation = validateCourse({
+      name: elements.nameInput.value.trim(),
+      color: elements.colorInput.value
+    });
+
+    elements.saveButton.disabled = !validation.isValid;
+
+    if (validation.isValid) {
+      elements.message.textContent = "";
+    }
+  }
 });

@@ -1,114 +1,121 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-  const cover1 = document.getElementById('backgroundCover1');
-  const cover2 = document.getElementById('backgroundCover2');
+document.addEventListener("DOMContentLoaded", function () {
+  const { dom, storageKeys } = window.TasksApp;
+  const cover1 = document.getElementById("backgroundCover1");
+  const cover2 = document.getElementById("backgroundCover2");
+  const gradientCheck = document.getElementById("backgroundCheck");
+  const color1 = document.getElementById("color1");
+  const color2 = document.getElementById("color2");
+  const backgroundOptions = dom.queryAll(".backgroundOption");
+
+  if (!cover1 || !cover2 || !gradientCheck || !color1 || !color2) {
+    return;
+  }
+
   let activeCover = cover1;
   let inactiveCover = cover2;
 
-  function applyBackground(background) {
-    inactiveCover.style.backgroundImage = background;
-    inactiveCover.style.opacity = '1';
-    activeCover.style.opacity = '0';
+  restoreBackground();
 
-    const temp = activeCover;
-    activeCover = inactiveCover;
-    inactiveCover = temp;
-  }
-
-  // Load saved backgrounds
-  window.onload = function() {
-    const savedBackgroundId = localStorage.getItem('backgroundOptionId');
-    const savedBackgroundValue = localStorage.getItem('backgroundOptionValue');
-    const gradientCheckboxState = localStorage.getItem('gradientCheckboxState');
-    const savedColor1 = localStorage.getItem('color1');
-    const savedColor2 = localStorage.getItem('color2');
-  
-    console.log("Saved Background ID:", savedBackgroundId); // Debugging
-  
-    // ... (rest of the code remains unchanged)
-  
-    if (savedBackgroundId && savedBackgroundId !== 'color-gradient-background') {
-      const selectedOption = document.getElementById(savedBackgroundId);
-      if (selectedOption) {
-        selectedOption.classList.add('selected');
-        applyBackground(savedBackgroundValue);
-        
-        // Check if the fourth image was saved and adjust background position
-        if (savedBackgroundId === 'bgOption4') {
-          activeCover.style.backgroundPosition = 'bottom'; 
-        } else {
-          activeCover.style.backgroundPosition = 'center';
-        }
-      }
-    }
-  }
-
-  document.getElementById('backgroundCheck').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const gradientBackground = `linear-gradient(to right, ${document.getElementById('color1').value}, ${document.getElementById('color2').value})`;
-
-    if (e.target.checked) {
-      // Unselect all background images
-      document.querySelectorAll('.backgroundOption').forEach((el) => {
-        el.classList.remove('selected');
-      });
-      document.getElementById('color-gradient-background').classList.add('selected');
-
-      applyBackground(gradientBackground);
-      localStorage.setItem('backgroundOptionId', 'color-gradient-background');
-      localStorage.setItem('backgroundOptionValue', gradientBackground);
-      localStorage.setItem('gradientCheckboxState', 'checked');
+  gradientCheck.addEventListener("change", function () {
+    if (gradientCheck.checked) {
+      clearImageSelection();
+      applyBackground(getGradientBackground());
+      localStorage.setItem(storageKeys.backgroundId, "color-gradient-background");
+      localStorage.setItem(storageKeys.backgroundValue, getGradientBackground());
+      localStorage.setItem(storageKeys.gradientState, "checked");
     } else {
-      applyBackground('');
-      localStorage.removeItem('backgroundOptionId');
-      localStorage.removeItem('backgroundOptionValue');
-      localStorage.setItem('gradientCheckboxState', 'unchecked');
+      applyBackground("");
+      localStorage.removeItem(storageKeys.backgroundId);
+      localStorage.removeItem(storageKeys.backgroundValue);
+      localStorage.setItem(storageKeys.gradientState, "unchecked");
     }
   });
 
-  document.getElementById('color1').addEventListener('change', () => {
-    localStorage.setItem('color1', document.getElementById('color1').value);
-    if (document.getElementById('backgroundCheck').checked) {
-      const gradientBackground = `linear-gradient(to right, ${document.getElementById('color1').value}, ${document.getElementById('color2').value})`;
-      applyBackground(gradientBackground);
-      localStorage.setItem('backgroundOptionValue', gradientBackground);
-    }
-  });
+  [color1, color2].forEach((input) => {
+    input.addEventListener("input", function () {
+      localStorage.setItem(input.id, input.value);
 
-  document.getElementById('color2').addEventListener('change', () => {
-    localStorage.setItem('color2', document.getElementById('color2').value);
-    if (document.getElementById('backgroundCheck').checked) {
-      const gradientBackground = `linear-gradient(to right, ${document.getElementById('color1').value}, ${document.getElementById('color2').value})`;
-      applyBackground(gradientBackground);
-      localStorage.setItem('backgroundOptionValue', gradientBackground);
-    }
-  });
-
-  document.querySelectorAll('.backgroundOption:not(#color-gradient-background)').forEach((element, index) => {
-    element.addEventListener('click', (e) => {
-      document.getElementById('backgroundCheck').checked = false;
-      localStorage.setItem('gradientCheckboxState', 'unchecked');
-  
-      const regex = /smallBackground\((\d)\)\.png/;
-      const matches = e.currentTarget.style.backgroundImage.match(regex);
-      if (matches && matches[1]) {
-        const bgNumber = matches[1];
-        const newBackground = `url('Images/background(${bgNumber}).jpg')`;
-        
-        if (index === 3) { 
-          inactiveCover.style.backgroundPosition = 'bottom';
-        } else {
-          inactiveCover.style.backgroundPosition = 'center';
-        }
-        
-        applyBackground(newBackground);
-        localStorage.setItem('backgroundOptionId', e.currentTarget.id);
-        localStorage.setItem('backgroundOptionValue', newBackground);
+      if (gradientCheck.checked) {
+        const gradientBackground = getGradientBackground();
+        applyBackground(gradientBackground);
+        localStorage.setItem(storageKeys.backgroundValue, gradientBackground);
       }
-  
-      document.querySelectorAll('.backgroundOption').forEach((el) => {
-        el.classList.remove('selected');
-      });
-      e.currentTarget.classList.add('selected');
     });
-  }); 
+  });
+
+  backgroundOptions.forEach((element) => {
+    element.addEventListener("click", function () {
+      const backgroundNumber = element.id.replace("bgOption", "");
+      const background = `url('Images/background(${backgroundNumber}).jpg')`;
+      const position = backgroundNumber === "4" ? "bottom" : "center";
+
+      gradientCheck.checked = false;
+      localStorage.setItem(storageKeys.gradientState, "unchecked");
+      applyBackground(background, position);
+      selectImageOption(element);
+      localStorage.setItem(storageKeys.backgroundId, element.id);
+      localStorage.setItem(storageKeys.backgroundValue, background);
+    });
+  });
+
+  function restoreBackground() {
+    const savedBackgroundId = localStorage.getItem(storageKeys.backgroundId);
+    const savedBackgroundValue = localStorage.getItem(storageKeys.backgroundValue);
+    const savedColor1 = localStorage.getItem(storageKeys.gradientStart);
+    const savedColor2 = localStorage.getItem(storageKeys.gradientEnd);
+    const gradientState = localStorage.getItem(storageKeys.gradientState);
+
+    if (savedColor1) {
+      color1.value = savedColor1;
+    }
+
+    if (savedColor2) {
+      color2.value = savedColor2;
+    }
+
+    if (savedBackgroundId === "color-gradient-background" || gradientState === "checked") {
+      gradientCheck.checked = true;
+      applyBackground(savedBackgroundValue || getGradientBackground());
+      return;
+    }
+
+    if (savedBackgroundId && savedBackgroundValue) {
+      const selectedOption = document.getElementById(savedBackgroundId);
+      const position = savedBackgroundId === "bgOption4" ? "bottom" : "center";
+
+      applyBackground(savedBackgroundValue, position);
+
+      if (selectedOption) {
+        selectImageOption(selectedOption);
+      }
+    }
+  }
+
+  function applyBackground(background, position) {
+    inactiveCover.style.backgroundImage = background;
+    inactiveCover.style.backgroundPosition = position || "center";
+    inactiveCover.style.opacity = "1";
+    activeCover.style.opacity = "0";
+
+    const previousCover = activeCover;
+    activeCover = inactiveCover;
+    inactiveCover = previousCover;
+  }
+
+  function getGradientBackground() {
+    return `linear-gradient(to right, ${color1.value}, ${color2.value})`;
+  }
+
+  function selectImageOption(selectedOption) {
+    clearImageSelection();
+    selectedOption.classList.add("selected");
+    selectedOption.setAttribute("aria-pressed", "true");
+  }
+
+  function clearImageSelection() {
+    backgroundOptions.forEach((option) => {
+      option.classList.remove("selected");
+      option.setAttribute("aria-pressed", "false");
+    });
+  }
 });

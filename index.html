@@ -2,270 +2,247 @@
 <html lang="en" dir="ltr">
 
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A local-first course and task planner for organizing assignments by due date.">
   <link rel="icon" href="Images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
-  <script src="javascript/Shrink.js"></script>
-  <script src="javascript/background.js"></script>
-  <script src="javascript/pageSwitch.js"></script>
-  <script src="javascript/pressCreateCourse.js"></script>
-  <script src="javascript/pressCreateTask.js"></script>
-  <script src="javascript/createTask.js"></script>
-  <script src="javascript/settingsButton.js"></script>
-  <script src="javascript/suggestions.js"></script>
-  <script src="javascript/settingsInteractions.js"></script>
-  <meta charset="utf-8">
+  <script defer src="javascript/appState.js"></script>
+  <script defer src="javascript/background.js"></script>
+  <script defer src="javascript/pageSwitch.js"></script>
+  <script defer src="javascript/Shrink.js"></script>
+  <script defer src="javascript/pressCreateCourse.js"></script>
+  <script defer src="javascript/createTask.js"></script>
+  <script defer src="javascript/pressCreateTask.js"></script>
+  <script defer src="javascript/settingsButton.js"></script>
   <title>Tasks</title>
 </head>
 
 <body>
-  <div id="backgroundCover1" class="backgroundCover" style="opacity: 1;"></div>
-  <div id="backgroundCover2" class="backgroundCover" style="opacity: 0;"></div>  
+  <div id="backgroundCover1" class="backgroundCover" style="opacity: 1;" aria-hidden="true"></div>
+  <div id="backgroundCover2" class="backgroundCover" style="opacity: 0;" aria-hidden="true"></div>
 
-  <div class="task-window">
-    <div class="Pages">
-      <button id="tasks-button" class="home-button active">Tasks</button>
-      <button id="courses-button" class="home-button">Courses</button>
-      <button id="shrink-button"><</button>
-      <div id="settingsBox">  
+  <main class="task-window" aria-labelledby="app-title">
+    <nav class="Pages" aria-label="Primary">
+      <button id="tasks-button" class="home-button active" type="button" aria-controls="tasks-panel" aria-pressed="true">Tasks</button>
+      <button id="courses-button" class="home-button" type="button" aria-controls="courses-panel" aria-pressed="false">Courses</button>
+      <button id="shrink-button" type="button" aria-label="Collapse sidebar">
+        <span aria-hidden="true">&lt;</span>
+      </button>
+      <div id="settingsBox">
         <div id="settingsGearBox">
-          <button type="button" class="settings-button">
-            <img id="gearImage" src="Images/gear.png" alt="gear">
+          <button id="settingsButton" type="button" class="settings-button" aria-label="Open settings" aria-expanded="false" aria-controls="settingsOverlay">
+            <img id="gearImage" src="Images/gear.png" alt="">
           </button>
         </div>
         <div id="suggestionContainer">
-          <a href="https://github.com/EliWoodard" target="_blank">
-            <button type="button" id="suggestionBox">
-              <img id="mailBoxImage" src="Images/mailBoxImage.png" alt="mail-box">
-            </button>
+          <a id="suggestionBox" href="https://github.com/EliWoodard" target="_blank" rel="noopener noreferrer" aria-label="Open project author's GitHub profile">
+            <img id="mailBoxImage" src="Images/mailBoxImage.png" alt="">
           </a>
         </div>
       </div>
-    </div>
-    <div class="right-content">
-      <div class="Title-Tasks">
-        <p class="TitleText">Tasks</p>
-      </div>
-      <div class="Tasks">
-        <div class="task-section" id="overdue">
-          <h2>Overdue
-            <hr class="dueUnderline">
-          </h2>
-          <div class="task-container"></div>
-        </div>
-        <div class="task-section" id="due-today">
-          <h2>Due Today
-            <hr class="dueUnderline">
-          </h2>
-          <div class="task-container"></div>
-        </div>
-        <div class="task-section" id="due-tomorrow">
-          <h2>Due Tomorrow
-            <hr class="dueUnderline">
-          </h2>
-          <div class="task-container"></div>
-        </div>
-        <div class="task-section" id="due-this-week">
-          <h2>Due This Week
-            <hr class="dueUnderline">
-          </h2>
-          <div class="task-container"></div>
-        </div>
-        <div class="task-section" id="due-next-week">
-          <h2>Due Next Week
-            <hr class="dueUnderline">
-          </h2>
-          <div class="task-container"></div>
-        </div>
-        <div class="task-section" id="due-this-month">
-          <h2>Due This Month
-            <hr class="dueUnderline">
-          </h2>
-          <div class="task-container"></div>
-        </div>
-        <div class="task-section" id="due-after">
-          <h2>Due After
-            <hr class="dueUnderline">
-          </h2>
-          <div class="task-container"></div>
-        </div>
-      </div>
-      <div class="Task-Create">
+    </nav>
+
+    <section class="right-content">
+      <header class="Title-Tasks" id="tasks-heading">
+        <h1 id="app-title" class="TitleText">Tasks</h1>
+      </header>
+
+      <section class="Tasks" id="tasks-panel" aria-labelledby="tasks-heading">
+        <section class="task-section" id="overdue" aria-labelledby="overdue-heading">
+          <h2 id="overdue-heading">Overdue</h2>
+          <div class="task-container" aria-live="polite"></div>
+        </section>
+        <section class="task-section" id="due-today" aria-labelledby="due-today-heading">
+          <h2 id="due-today-heading">Due Today</h2>
+          <div class="task-container" aria-live="polite"></div>
+        </section>
+        <section class="task-section" id="due-tomorrow" aria-labelledby="due-tomorrow-heading">
+          <h2 id="due-tomorrow-heading">Due Tomorrow</h2>
+          <div class="task-container" aria-live="polite"></div>
+        </section>
+        <section class="task-section" id="due-this-week" aria-labelledby="due-this-week-heading">
+          <h2 id="due-this-week-heading">Due This Week</h2>
+          <div class="task-container" aria-live="polite"></div>
+        </section>
+        <section class="task-section" id="due-next-week" aria-labelledby="due-next-week-heading">
+          <h2 id="due-next-week-heading">Due Next Week</h2>
+          <div class="task-container" aria-live="polite"></div>
+        </section>
+        <section class="task-section" id="due-this-month" aria-labelledby="due-this-month-heading">
+          <h2 id="due-this-month-heading">Due This Month</h2>
+          <div class="task-container" aria-live="polite"></div>
+        </section>
+        <section class="task-section" id="due-after" aria-labelledby="due-after-heading">
+          <h2 id="due-after-heading">Due After</h2>
+          <div class="task-container" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <section class="Task-Create" aria-label="Task actions">
         <div class="Task-Container">
           <div class="hover-panel">
-            <button class="create-task-button">Create Task</button>
+            <button class="create-task-button" type="button">Create Task</button>
           </div>
         </div>
-      </div>
-      <div class="Title-Courses">
-        <p>Courses</p>
-      </div>
-      <div class="Courses">
+      </section>
 
-      </div>
-      <div class="Course-Adder">
+      <header class="Title-Courses" id="courses-heading" hidden>
+        <h1>Courses</h1>
+      </header>
+
+      <section class="Courses" id="courses-panel" aria-labelledby="courses-heading" hidden></section>
+
+      <section class="Course-Adder" aria-label="Course actions" hidden>
         <div class="Course-Container">
           <div class="hover-panel">
-            <button class="add-course-button">Add Course</button>
+            <button class="add-course-button" type="button">Add Course</button>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </section>
+    </section>
+  </main>
 
-  <div class="overlay"></div>
+  <div class="overlay" hidden></div>
+  <p id="app-status" class="sr-only" role="status" aria-live="polite"></p>
 
-  <div class="AddTaskWindow">
-    <div class="Title-AddTask">
-      <p class="Title-AddTask-Element">New Task</p>
-    </div>
+  <section class="AddTaskWindow" role="dialog" aria-modal="true" aria-labelledby="add-task-title" hidden>
+    <header class="Title-AddTask">
+      <h2 class="Title-AddTask-Element" id="add-task-title">New Task</h2>
+    </header>
     <div class="DueDate_Subject_AddSubject">
       <div class="DueDate">
-        <p class="NewTaskText">Date</p>
-
-        <input type="date" id="date" name="date">
+        <label class="NewTaskText" for="date">Date</label>
+        <input type="date" id="date" name="date" required>
       </div>
       <div class="Subject">
-        <p class="NewTaskText">Subject</p>
-        <select id="subject-select" name="subject">
-          <option value="">Subject</option>
-        </select>
+        <label class="NewTaskText" for="subject-select">Course</label>
+        <select id="subject-select" name="subject"></select>
       </div>
     </div>
     <div class="AddTitle">
-      <p class="NewTaskText" id="Title-Text">Title</p>
-      <input type="text" class="task-title" name="task-title">
+      <label class="NewTaskText" id="Title-Text" for="task-title-input">Title</label>
+      <input type="text" class="task-title" id="task-title-input" name="task-title" maxlength="80" required>
     </div>
     <div class="Add_Description">
-      <p class="NewTaskText" id="Description-Text">Description</p>
-      <textarea id="task-Description" name="task-Description"></textarea>
+      <label class="NewTaskText" id="Description-Text" for="task-Description">Description</label>
+      <textarea id="task-Description" name="task-Description" maxlength="500"></textarea>
     </div>
+
+    <p id="taskFormMessage" class="form-message" role="status" aria-live="polite"></p>
 
     <div class="DiscardAndSave">
-      <button type="button" class="task-button" id="discard-button">Discard</button>
-      <button type="button" class="task-button" id="save-button">Save</button>
+      <button type="button" class="task-button secondary-button" id="discard-button">Discard</button>
+      <button type="button" class="task-button primary-button" id="save-button">Save</button>
     </div>
-  </div>
-  <div class="AddCourseWindow">
-    <div class="Course-AddTask-Element">
-      <p class="couse-title">New Course</p>
-    </div>
-    <div class="course-input">
-      <input type="text" id="course-name" placeholder="Course name">
-      <input type="color" id="course-color">
-    </div>
-    <div class="course-buttons">
-      <button class="course-button" id="discard-course-button">Discard</button>
-      <button class="course-button" id="save-course-button">Save</button>
-    </div>
-  </div>
+  </section>
 
-  <div id="settingsOverlay">
-    <div id="leftSettingsColumn">
-      <button id="profile-button" class="settingsOption active">Profile</button>
-      <button id="filters-button" class="settingsOption">Filters</button>
-      <button id="background-button" class="settingsOption">Background</button>
+  <section class="AddCourseWindow" role="dialog" aria-modal="true" aria-labelledby="add-course-title" hidden>
+    <header class="Course-AddTask-Element">
+      <h2 class="course-title" id="add-course-title">New Course</h2>
+    </header>
+    <div class="course-input">
+      <label class="sr-only" for="course-name">Course name</label>
+      <input type="text" id="course-name" placeholder="Course name" maxlength="50" required>
+      <label class="sr-only" for="course-color">Course color</label>
+      <input type="color" id="course-color" value="#2e8b57">
     </div>
+    <p id="courseFormMessage" class="form-message" role="status" aria-live="polite"></p>
+    <div class="course-buttons">
+      <button class="course-button secondary-button" id="discard-course-button" type="button">Discard</button>
+      <button class="course-button primary-button" id="save-course-button" type="button">Save</button>
+    </div>
+  </section>
+
+  <section id="settingsOverlay" role="dialog" aria-modal="false" aria-labelledby="profileSettingsHeader" hidden>
+    <nav id="leftSettingsColumn" aria-label="Settings">
+      <button id="profile-button" class="settingsOption active" type="button" aria-controls="profilePage" aria-pressed="true">Profile</button>
+      <button id="filters-button" class="settingsOption" type="button" aria-controls="filterPage" aria-pressed="false">Filters</button>
+      <button id="background-button" class="settingsOption" type="button" aria-controls="backgroundPage" aria-pressed="false">Background</button>
+    </nav>
     <div id="rightSettingsColumn">
       <div id="closeButtonSection">
-        <span id="closeButton">✕</span>
+        <button id="closeButton" type="button" aria-label="Close settings">×</button>
       </div>
-      <div id="profilePage">
-        <h1 id="settingsHeader">
-          Profile
-        </h1>
-        <div class="settiongsContent">
+      <section id="profilePage" class="settings-page">
+        <h2 class="settingsHeader" id="profileSettingsHeader">Profile</h2>
+        <div class="settingsContent">
           <p id="tasksSize">Tasks Size: </p>
           <p id="coursesSize">Courses Size: </p>
           <p id="totalSize">Total Bytes: </p>
           <p id="availableSize">Available Bytes: </p>
         </div>
         <div id="clearCacheContainer">
-          <button id="clearCache">Clear Cache</button>
+          <button id="clearCache" type="button">Clear Cache</button>
         </div>
-      </div>
-      <div id="filterPage">
-        <h1 id="settingsHeader">
-          Filters
-        </h1>
-        <div class="settingsContent">
-          <div class="filterSections">
-            <label>
-              <input type="checkbox" id="checkbox1" name="checkbox1">
-              Due-Tomorrow
-            </label>
-          </div>
-        <br>
-        <div class="filterSections">
-          <label>
+      </section>
+      <section id="filterPage" class="settings-page" hidden>
+        <h2 class="settingsHeader" id="filterSettingsHeader">Filters</h2>
+        <div class="settingsContent filter-list">
+          <label class="filterSections">
+            <input type="checkbox" id="checkbox1" name="checkbox1">
+            Due Tomorrow
+          </label>
+          <label class="filterSections">
             <input type="checkbox" id="checkbox2" name="checkbox2">
-            Due-This-Week
+            Due This Week
           </label>
-        </div>
-        <br>
-        <div class="filterSections">
-          <label>
+          <label class="filterSections">
             <input type="checkbox" id="checkbox3" name="checkbox3">
-            Due-Next-Week
+            Due Next Week
           </label>
-        </div>
-        <br>
-        <div class="filterSections">
-          <label>
+          <label class="filterSections">
             <input type="checkbox" id="checkbox4" name="checkbox4">
-            Due-This-Month
+            Due This Month
           </label>
-        </div>
-        <br>
-        <div class="filterSections">
-          <label>
+          <label class="filterSections">
             <input type="checkbox" id="checkbox5" name="checkbox5">
-            Due-After
+            Due After
           </label>
         </div>
-        </div>
-      </div>
-      <div id="backgroundPage">
-        <h1 id="settingsHeader">
-          Background
-        </h1>
+      </section>
+      <section id="backgroundPage" class="settings-page" hidden>
+        <h2 class="settingsHeader" id="backgroundSettingsHeader">Background</h2>
         <div id="backgroundContent">
-          <div class="backgroundOption" id="bgOption1" style="background-image: url('Images/smallBackground(1).png');"></div>
-          <div class="backgroundOption" id="bgOption2" style="background-image: url('Images/smallBackground(2).png');"></div>
-          <div class="backgroundOption" id="bgOption3" style="background-image: url('Images/smallBackground(3).png');"></div>
-          <div class="backgroundOption" id="bgOption4" style="background-image: url('Images/smallBackground(4).png');"></div>
-          <!--More backgrounds can be added-->
+          <button type="button" class="backgroundOption" id="bgOption1" style="background-image: url('Images/smallBackground(1).png');" aria-label="Use background one"></button>
+          <button type="button" class="backgroundOption" id="bgOption2" style="background-image: url('Images/smallBackground(2).png');" aria-label="Use background two"></button>
+          <button type="button" class="backgroundOption" id="bgOption3" style="background-image: url('Images/smallBackground(3).png');" aria-label="Use background three"></button>
+          <button type="button" class="backgroundOption" id="bgOption4" style="background-image: url('Images/smallBackground(4).png');" aria-label="Use background four"></button>
           <div id="color-gradient-background">
             <div class="switch-wrapper">
-              <input type="checkbox" id="backgroundCheck" class="switch" />
-              <label for="backgroundCheck" class="switch-label"></label>
+              <input type="checkbox" id="backgroundCheck" class="switch">
+              <label for="backgroundCheck" class="switch-label">Gradient background</label>
             </div>
-            <input type="color" id="color1" value="#ff0000">
-            <input type="color" id="color2" value="#0000ff">
-            <div id="circle">
-              <div id="handle" class="ui-slider-handle"></div>
-            </div>
+            <label class="sr-only" for="color1">Gradient start color</label>
+            <input type="color" id="color1" value="#2e8b57">
+            <label class="sr-only" for="color2">Gradient end color</label>
+            <input type="color" id="color2" value="#cf7c00">
           </div>
         </div>
-      </div>
+      </section>
     </div>
-  </div>
+  </section>
 
-  <div id="tasksOverlay">
-    <div id="tasksOverlayLeft"></div>
+  <section id="tasksOverlay" role="dialog" aria-modal="true" aria-labelledby="taskTitleLabel" hidden>
+    <div id="tasksOverlayLeft" aria-hidden="true"></div>
     <div id="tasksColumn">
-      <input id="taskTitle" type="text">
+      <label class="sr-only" id="taskTitleLabel" for="taskTitle">Task title</label>
+      <input id="taskTitle" type="text" maxlength="80">
       <div id="taskOverlayOrganization">
+        <label class="sr-only" for="taskSubject">Task course</label>
         <select id="taskSubject"></select>
+        <label class="sr-only" for="taskDate">Task date</label>
         <input id="taskDate" type="date">
       </div>
-      <textarea id="taskDescription"></textarea>
-        <div id="taskOverlayButtons">
-          <button id="discardButton">Discard</button>
-          <button id="saveButton">Save</button>
-          <button id="completeButton">Complete</button>
-        </div>
+      <label class="sr-only" for="taskDescription">Task description</label>
+      <textarea id="taskDescription" maxlength="500"></textarea>
+      <p id="editTaskMessage" class="form-message" role="status" aria-live="polite"></p>
+      <div id="taskOverlayButtons">
+        <button id="discardButton" class="secondary-button" type="button">Discard</button>
+        <button id="saveButton" class="primary-button" type="button">Save</button>
+        <button id="completeButton" class="danger-button" type="button">Complete</button>
       </div>
     </div>
-  </div>
+  </section>
 </body>
 </html>

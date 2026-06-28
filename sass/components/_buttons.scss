@@ -1,177 +1,143 @@
 #shrink-button {
   position: absolute;
   top: 50%;
-  right: -7%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  background-color: #343434;
+  right: -24px;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  cursor: pointer;
-  border: none;
-  transition: transform 0.5s;
-  color: #e7e7e7;
-  font-size: 200%;
+  justify-content: center;
+  border: 1px solid rgba(#fff, 0.12);
+  border-radius: 50%;
+  background-color: $color-sidebar;
+  color: #f2f5f0;
+  font-size: 1.6rem;
+  line-height: 1;
+  box-shadow: 0 8px 18px rgba(#000, 0.24);
+  transform: translateY(-50%);
+  transition: transform 0.3s ease, background-color 0.2s ease;
+}
+
+#shrink-button:hover {
+  background-color: #15181a;
 }
 
 .task-window.shrink {
-  grid-template-columns: 2% 98%;
+  grid-template-columns: 52px 1fr;
 }
 
-.task-window.shrink .Pages *:not(.shrink-button) {
-  display: none;
+.task-window.shrink .Pages > :not(#shrink-button) {
+  opacity: 0;
+  pointer-events: none;
 }
-
-.task-window.shrink .Pages .shrink-button {
-  display: block;
-}
-
 
 #shrink-button.flipped {
   transform: translateY(-50%) rotate(180deg);
 }
 
 .home-button {
-  position: relative;
-  background-color: #4CAF50;
-  height: 8%;
-  width: 70%;
-  color: #fff;
-  border: none;
+  width: calc(100% - 1.3rem);
+  min-height: 48px;
+  margin-left: 0;
+  border: 0;
+  border-radius: 0 $radius $radius 0;
+  background-color: rgba(#fff, 0.1);
+  color: #f8faf7;
   text-align: left;
-  font-size: calc(1vw + 1vh);
-  margin-top: 10%;
-  margin-right: 10%;
-  transition-duration: 0.4s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  padding: 0 1rem 0 1.2rem;
+  transition: width 0.22s ease, background-color 0.22s ease, color 0.22s ease;
 }
 
-.home-button:hover,
-.courses-button:hover {
-  background-color: #388E3C;
-  width: 75%;
+.home-button:hover {
+  width: calc(100% - 0.85rem);
+  background-color: rgba($color-primary, 0.86);
 }
 
 .home-button.active {
-  background-color: #2E8B57;
-  width: 80%;
-}
-
-.home-button:active,
-.courses-button:active {
-  transform: translateY(1px);
-}
-
-.Task-Container,
-.Course-Container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+  width: calc(100% - 0.5rem);
+  background-color: $color-primary;
 }
 
 .add-course-button,
 .create-task-button {
   width: 100%;
   height: 100%;
-  position: relative;
-  background-color: #4CAF50;
-  color: #ffffff;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s
+  border: 0;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  transition: background-color 0.2s ease;
 }
 
-.hover-panel {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  perspective: 800px;
-  cursor: pointer;
-}
-
-.panel {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #ffffff;
-  transform-style: preserve-3d;
-  transition: transform 0.5s ease;
-  transform-origin: top center;
-  z-index: 2;
-}
-
-.hover-panel:hover .panel {
-  transform: rotateX(180deg);
-}
-
-.Task-Create {
-  position: relative;
+.create-task-button {
+  background-color: $color-primary;
 }
 
 .create-task-button:hover {
-  background-color: #009900;
-}
-
-.create-task-button:active {
-  box-shadow: none;
-  position: relative;
-  background-color: #006900;
+  background-color: $color-primary-dark;
 }
 
 .add-course-button {
-  background-color: #cf7c00;
-}
-
-.hover-panel {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  perspective: 800px;
-  cursor: pointer;
+  background-color: $color-accent;
 }
 
 .add-course-button:hover {
-  background-color: #bb7000;
+  background-color: $color-accent-dark;
 }
 
-.add-course-button:active {
-  box-shadow: none;
-  position: relative;
-  background-color: #945900;
+.settings-button,
+#suggestionBox {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: $radius-small;
+  background-color: rgba(#fff, 0.08);
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.settings-button {
-  background-color: transparent;
-  border: none;
+.settings-button:hover,
+#suggestionBox:hover {
+  background-color: rgba(#fff, 0.16);
 }
 
-#gearImage {
-  width: 80%;
-  margin: 0;
-  padding: 0;
-  filter: invert(50%);
-  transition: transform 0.8s ease, position 0.8s ease, top 0.2s ease;
-  position: relative; 
-  top: 0; 
+#gearImage,
+#mailBoxImage {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: invert(70%);
+  transition: transform 0.4s ease, filter 0.2s ease;
 }
 
-#gearImage:hover {
-  animation: spin 2s 1 linear;
+.settings-button:hover #gearImage {
+  transform: rotate(60deg);
 }
 
-#gearImage:active {
-  top: 3px;
+#suggestionBox:hover #mailBoxImage {
+  filter: invert(82%) sepia(19%) saturate(812%) hue-rotate(78deg);
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@media (max-width: 820px) {
+  #shrink-button {
+    display: none;
+  }
+
+  .home-button {
+    width: auto;
+    min-width: 104px;
+    border-radius: $radius;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  .home-button:hover,
+  .home-button.active {
+    width: auto;
+  }
 }
